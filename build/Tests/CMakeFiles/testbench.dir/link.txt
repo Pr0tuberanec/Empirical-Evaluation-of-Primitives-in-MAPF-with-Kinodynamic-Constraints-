@@ -1,0 +1,1 @@
+/usr/bin/g++-12  -std=c++11 -O2 -Wall -Wextra -g -rdynamic CMakeFiles/testbench.dir/testbench.cpp.o -o testbench  ../Src/libPPLIB.a 

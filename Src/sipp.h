@@ -1,0 +1,48 @@
+#ifndef SIPP_H
+#define SIPP_H
+#include "gl_const.h"
+#include "heap.h"
+#include "ilogger.h"
+#include "search.h"
+
+#include <math.h>
+#include <stdlib.h>
+
+class SIPP : public Search
+{
+    public:
+        SIPP();
+        SIPP(double weight, int BT);
+        ~SIPP();
+        SearchResult startSearch();
+    
+    private:
+        TimeNode getMin();
+
+        // std::vector<std::pair<int, int>> getFreeTimesteps(int nodeIdx);
+        // std::vector<std::pair<int, int>> timeIntervalsBuilding();
+
+        void initializeSearch();
+        
+        void processNode(const TimeNode& curNode);                              
+
+        bool isNodeInOpen(int nodeIdx, int start_t);
+        bool isValidSuccessor(int nodeIdx, int start_t);
+        // int findEarliestAvailableTime(TimeNode& curNode, Node& tmp, int l_bnd_t, int r_bnd_t);
+        // bool checkIntersection(TimeNode curNode, Node newNode, int cur_time);
+
+        void getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors);
+        void updateSearchResult(Node* curNode, bool found,
+            std::chrono::time_point<std::chrono::system_clock> start);
+
+        bool stopCriterion();
+
+        double hweight;      // weight of h-value
+        bool breakingties;   // flag that sets the priority of nodes in addOpen function when their F-values are equal
+
+        BinHeap open;  // vector, после каждой вставки и удаления делать make_heap / pop_heap
+        std::unordered_map<int, std::unordered_map<int, TimeNode>> close;
+        std::unordered_map<int, std::vector<std::pair<int, int>>> free_timesteps_table;
+};
+
+#endif

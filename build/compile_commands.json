@@ -1,0 +1,82 @@
+[
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/YourFirstName_YourLastName_ASearch.dir/config.cpp.o -c /home/user/path-planning-project-master/Src/config.cpp",
+  "file": "/home/user/path-planning-project-master/Src/config.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/YourFirstName_YourLastName_ASearch.dir/environmentoptions.cpp.o -c /home/user/path-planning-project-master/Src/environmentoptions.cpp",
+  "file": "/home/user/path-planning-project-master/Src/environmentoptions.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/YourFirstName_YourLastName_ASearch.dir/map.cpp.o -c /home/user/path-planning-project-master/Src/map.cpp",
+  "file": "/home/user/path-planning-project-master/Src/map.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/YourFirstName_YourLastName_ASearch.dir/mission.cpp.o -c /home/user/path-planning-project-master/Src/mission.cpp",
+  "file": "/home/user/path-planning-project-master/Src/mission.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/YourFirstName_YourLastName_ASearch.dir/search.cpp.o -c /home/user/path-planning-project-master/Src/search.cpp",
+  "file": "/home/user/path-planning-project-master/Src/search.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/YourFirstName_YourLastName_ASearch.dir/tinyxml2.cpp.o -c /home/user/path-planning-project-master/Src/tinyxml2.cpp",
+  "file": "/home/user/path-planning-project-master/Src/tinyxml2.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/YourFirstName_YourLastName_ASearch.dir/xmllogger.cpp.o -c /home/user/path-planning-project-master/Src/xmllogger.cpp",
+  "file": "/home/user/path-planning-project-master/Src/xmllogger.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/YourFirstName_YourLastName_ASearch.dir/main.cpp.o -c /home/user/path-planning-project-master/Src/main.cpp",
+  "file": "/home/user/path-planning-project-master/Src/main.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/PPLIB.dir/config.cpp.o -c /home/user/path-planning-project-master/Src/config.cpp",
+  "file": "/home/user/path-planning-project-master/Src/config.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/PPLIB.dir/environmentoptions.cpp.o -c /home/user/path-planning-project-master/Src/environmentoptions.cpp",
+  "file": "/home/user/path-planning-project-master/Src/environmentoptions.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/PPLIB.dir/map.cpp.o -c /home/user/path-planning-project-master/Src/map.cpp",
+  "file": "/home/user/path-planning-project-master/Src/map.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/PPLIB.dir/mission.cpp.o -c /home/user/path-planning-project-master/Src/mission.cpp",
+  "file": "/home/user/path-planning-project-master/Src/mission.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/PPLIB.dir/search.cpp.o -c /home/user/path-planning-project-master/Src/search.cpp",
+  "file": "/home/user/path-planning-project-master/Src/search.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/PPLIB.dir/tinyxml2.cpp.o -c /home/user/path-planning-project-master/Src/tinyxml2.cpp",
+  "file": "/home/user/path-planning-project-master/Src/tinyxml2.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Src",
+  "command": "/usr/bin/g++-12    -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/PPLIB.dir/xmllogger.cpp.o -c /home/user/path-planning-project-master/Src/xmllogger.cpp",
+  "file": "/home/user/path-planning-project-master/Src/xmllogger.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build/Tests",
+  "command": "/usr/bin/g++-12  -I/home/user/path-planning-project-master/Tests/../Src  -std=c++11 -O2 -Wall -Wextra -g -o CMakeFiles/testbench.dir/testbench.cpp.o -c /home/user/path-planning-project-master/Tests/testbench.cpp",
+  "file": "/home/user/path-planning-project-master/Tests/testbench.cpp"
+}
+]
