@@ -63,16 +63,21 @@ void DynObs::AddIntervalToMaxTime(const std::unordered_map<int, int>& timesteps,
     }
 }
 
-// Different sizes
 void DynObs::timeIntervalBuilding(const Map& map) {
     if (!obstacles_paths.empty()) {
+        auto max_time = std::max_element(obstacles_paths.begin(), obstacles_paths.end(),
+        [](const std::vector<Node>& a, const std::vector<Node>& b) {
+            return a.size() < b.size();
+        })->size();
+
         int current_cell;
         int previous_time_step;
         std::unordered_map<int, int> timesteps;
-        for(size_t time = 0; time < obstacles_paths[0].size(); ++time) {
+        for(size_t time = 0; time < max_time; ++time) {
             for(size_t obs_idx = 0; obs_idx < obstacles_paths.size(); ++obs_idx) {
                 previous_time_step = -1;
-                Node obstacle_pos = obstacles_paths[obs_idx][time];
+                Node obstacle_pos = (obstacles_paths[obs_idx].size() <= time) ?
+                    obstacles_paths[obs_idx].back() : obstacles_paths[obs_idx][time];
                 current_cell = obstacle_pos.i * map.width + obstacle_pos.j;
 
                 if (timesteps.find(current_cell) != timesteps.end()) {
@@ -87,6 +92,6 @@ void DynObs::timeIntervalBuilding(const Map& map) {
             }
         }
 
-        AddIntervalToMaxTime(timesteps, obstacles_paths[0].size() - 1);
+        AddIntervalToMaxTime(timesteps, max_time - 1);
     }
 }

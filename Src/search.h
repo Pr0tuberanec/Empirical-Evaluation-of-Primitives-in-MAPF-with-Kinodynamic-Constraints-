@@ -19,6 +19,13 @@ class Search
         void SetLogger(ILogger* inp_logger) { logger = inp_logger; };
         void SetMap(Map* inp_map) { map = inp_map; };
         void SetOptions(EnvironmentOptions* inp_options) { options = inp_options; };
+        void SetPtrFreeTimestepsTable(
+            std::unordered_map<int, std::vector<std::pair<int, int>>>* table) {
+            free_timesteps_table = table;
+        }
+        void SetPtrObstaclesPaths(std::vector<std::vector<Node>>* paths) {
+            obstacles_paths = paths;
+        }
 
     protected:
         virtual void updateSearchResult(Node* curNode, bool found,
@@ -33,7 +40,8 @@ class Search
 
         SearchResult                     sresult;
         std::list<std::shared_ptr<Node>> lppath, hppath;
-        std::vector<std::vector<Node>>   obstacles_paths;
+        std::vector<std::vector<Node>>*  obstacles_paths;
+        std::unordered_map<int, std::vector<std::pair<int, int>>>* free_timesteps_table;  
 };
 
 double computeHFromCellToCell(int i1, int j1, int i2, int j2, const EnvironmentOptions &options);

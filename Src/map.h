@@ -29,8 +29,16 @@ class Map
 
     public:
         Map();
-        Map(const Map& orig);
+        //Map(const Map& orig);
         ~Map();
+
+        Map(const Map& orig)
+            : height(orig.height), width(orig.width),
+            start_i(orig.start_i), start_j(orig.start_j),
+            goal_i(orig.goal_i), goal_j(orig.goal_j),
+            cellSize(orig.cellSize),
+            Grid(orig.Grid) // Копируем shared_ptr, разделяя владение
+        {}
 
         bool getMap(const char *FileName);
         bool CellIsTraversable (int i, int j) const;

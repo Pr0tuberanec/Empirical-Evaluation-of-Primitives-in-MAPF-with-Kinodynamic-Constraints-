@@ -20,6 +20,9 @@ public:
     void timeIntervalBuilding(const Map& map);
 
     std::vector<std::vector<Node>>* GetPtrObstaclesPaths() { return &obstacles_paths; }
+    std::unordered_map<int, std::vector<std::pair<int, int>>>* GetPtrFreeTimestepsTable() {
+        return &free_timesteps_table;
+    }
 
 private:
     std::mt19937 generator;

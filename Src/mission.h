@@ -34,8 +34,6 @@ class Mission
         void printSearchResultsToConsole();
         void saveSearchResultsToLog();
         SearchResult getSearchResult();
-
-        void createDynObstacles();
         
     private:
         Map                     map;

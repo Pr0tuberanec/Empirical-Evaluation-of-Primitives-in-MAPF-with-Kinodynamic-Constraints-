@@ -44,12 +44,6 @@ void Mission::createEnvironmentOptions()
     options.allowsqueeze = config.SearchParams[CN_SP_AS];
     options.allowdiagonal = config.SearchParams[CN_SP_AD];
     options.metrictype = config.SearchParams[CN_SP_MT];
-
-}
-
-void Mission::createDynObstacles()
-{
-    dyn_obs_creator.createDynObstacles(logger, &map, &options, 10, 0);
 }
 
 void Mission::createSearch()
@@ -63,6 +57,10 @@ void Mission::startSearch()
     search->SetLogger(logger);
     search->SetMap(&map);
     search->SetOptions(&options);
+
+    dyn_obs_creator.createDynObstacles(logger, &map, &options, 10, 0);
+    search->SetPtrFreeTimestepsTable(dyn_obs_creator.GetPtrFreeTimestepsTable());
+    search->SetPtrObstaclesPaths(dyn_obs_creator.GetPtrObstaclesPaths());
     sr = search->startSearch();
 }
 

@@ -34,10 +34,10 @@ void SIPP::initializeSearch() {
     //timeIntervalBuilding(free_timesteps_table, obstacles_paths, map);
 
     int start_pos = map->start_i * map->width + map->start_j;
-    int start_t = free_timesteps_table.count(start_pos) ?
-                  free_timesteps_table[start_pos][0].first : 0;
-    int end_t = free_timesteps_table.count(start_pos) ?
-                free_timesteps_table[start_pos][0].second : map->height * map->width - 1;
+    int start_t = free_timesteps_table->count(start_pos) ?
+                  (*free_timesteps_table)[start_pos][0].first : 0;
+    int end_t = free_timesteps_table->count(start_pos) ?
+                (*free_timesteps_table)[start_pos][0].second : map->height * map->width - 1;
 
     TimeNode startNode(map->start_i, map->start_j, 0,
                        computeHFromCellToCell(map->start_i, map->start_j, map->goal_i, map->goal_j, *options),
@@ -102,28 +102,28 @@ TimeNode SIPP::getMin()
     return min;
 }
 
-// // Нужно перейти на рёберную проверку пересечений
-// bool SIPP::checkIntersection(TimeNode curNode, Node newNode, int cur_time) {
-//     if (!obstacles_paths.empty()) {
-//         for (size_t obs_idx = 0; obs_idx < obstacles_paths.size(); ++obs_idx) {
-//             if (((obstacles_paths[obs_idx][cur_time + 1].x == curNode.j) &&
-//                  (obstacles_paths[obs_idx][cur_time + 1].y == curNode.i)) &&
-//                 ((obstacles_paths[obs_idx][cur_time].x == newNode.x) &&
-//                  (obstacles_paths[obs_idx][cur_time].y == newNode.y))) {
-//                 return true;
-//             }
-//         }
-//     }
-//     return false;
-// }
+// Нужно перейти на рёберную проверку пересечений
+bool SIPP::checkIntersection(TimeNode curNode, Node newNode, int cur_time) {
+    if (!obstacles_paths->empty()) {
+        for (size_t obs_idx = 0; obs_idx < obstacles_paths->size(); ++obs_idx) {
+            if ((((*obstacles_paths)[obs_idx][cur_time + 1].i == curNode.i) &&
+                 ((*obstacles_paths)[obs_idx][cur_time + 1].j == curNode.j)) &&
+                (((*obstacles_paths)[obs_idx][cur_time].i == newNode.i) &&
+                 ((*obstacles_paths)[obs_idx][cur_time].j == newNode.j))) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
-// std::vector<std::pair<int, int>> SIPP::getFreeTimesteps(int nodeIdx) {
+std::vector<std::pair<int, int>> SIPP::getFreeTimesteps(int nodeIdx) {
     
-//     if (free_timesteps_table.find(nodeIdx) == free_timesteps_table.end()) {
-//         return {{0, map->height * map->width - 1}};
-//     }
-//     return free_timesteps_table[nodeIdx];
-// }
+    if (free_timesteps_table->find(nodeIdx) == free_timesteps_table->end()) {
+        return {{0, map->height * map->width - 1}};
+    }
+    return (*free_timesteps_table)[nodeIdx];
+}
 
 bool SIPP::isValidSuccessor(int nodeIdx, int start_t) {
     
@@ -151,28 +151,28 @@ void SIPP::getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors) {
             continue;
         }
         
-        // auto free_timesteps = getFreeTimesteps(nodeIdx, free_timesteps_table, map);
-        // for (const auto& [start_t, end_t] : free_timesteps) {
-        //     if (!isValidSuccessor(nodeIdx, start_t, close)) {
-        //         continue;
-        //     }
+        auto free_timesteps = getFreeTimesteps(nodeIdx);
+        for (const auto& [start_t, end_t] : free_timesteps) {
+            if (!isValidSuccessor(nodeIdx, start_t)) {
+                continue;
+            }
 
-        //     if (start_t > curNode.end_t + 1 || end_t < curNode.t + 1) {
-        //         continue;
-        //     }
+            if (start_t > curNode.end_t + 1 || end_t < curNode.t + 1) {
+                continue;
+            }
 
-        //     int l_bnd_t = (start_t <= curNode.t + 1) ? curNode.t + 1 : start_t;
-        //     int r_bnd_t = (end_t <= curNode.t + 1) ? end_t : curNode.end_t + 1;
+            int l_bnd_t = (start_t <= curNode.t + 1) ? curNode.t + 1 : start_t;
+            int r_bnd_t = (end_t <= curNode.t + 1) ? end_t : curNode.end_t + 1;
 
-        //     int earliest_time = findEarliestAvailableTime(curNode, tmp, l_bnd_t, r_bnd_t, obstacles_paths);
-        //     if (earliest_time == -1) {
-        //         continue;
-        //     }
+            int earliest_time = findEarliestAvailableTime(curNode, tmp, l_bnd_t, r_bnd_t);
+            if (earliest_time == -1) {
+                continue;
+            }
 
-        //     Node newNode(tmp.y, tmp.x, curNode.g + 1,
-        //                  computeHFromCellToCell(tmp.y, tmp.x, map->goal_i, map->goal_j, *options), 
-        //                  hweight, start_t, end_t, earliest_time, nullptr);
-        //     successors.push_back(newNode);
-        // }
+            TimeNode newNode(tmp.i, tmp.j, curNode.g + 1,
+                             computeHFromCellToCell(tmp.i, tmp.j, map->goal_i, map->goal_j, *options), 
+                             hweight, start_t, end_t, earliest_time, nullptr);
+            successors.push_back(newNode);
+        }
     }
 }
