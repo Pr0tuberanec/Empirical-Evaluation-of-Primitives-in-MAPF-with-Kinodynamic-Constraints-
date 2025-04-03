@@ -5,6 +5,9 @@
 #include <sstream>
 #include <algorithm>
 #include <math.h>
+#include "json.hpp"
+#include <fstream>
+using json = nlohmann::json;
 
 Config::Config()
 {
@@ -21,83 +24,80 @@ Config::~Config()
 bool Config::getConfig(const char *FileName)
 {
     std::string value;
-    std::stringstream stream;
-    tinyxml2::XMLElement *root = 0, *algorithm = 0, *element = 0, *options = 0;
-
-    tinyxml2::XMLDocument doc;
-    if (doc.LoadFile(FileName) != tinyxml2::XMLError::XML_SUCCESS) {
-        std::cout << "Error opening XML file!" << std::endl;
+    std::ifstream file(FileName);
+    if (!json::accept(file))
+    {
+        std::cout << "Error opening JSON file!" << std::endl;
         return false;
     }
+    json objJson = json::parse(std::ifstream(FileName));
 
-    root = doc.FirstChildElement(CNS_TAG_ROOT);
-    if (!root) {
-        std::cout << "Error! No '" << CNS_TAG_ROOT << "' element found in XML file!" << std::endl;
+    json root;
+    if (!objJson.contains(CNS_TAG_ROOT)) {
+        std::cout << "Error! No '" << CNS_TAG_ROOT << "' element found in JSON file!" << std::endl;
         return false;
     }
+    root = objJson[CNS_TAG_ROOT];
 
-    algorithm = root->FirstChildElement(CNS_TAG_ALG);
-    if (!algorithm) {
-        std::cout << "Error! No '" << CNS_TAG_ALG << "' tag found in XML file!" << std::endl;
+    json algorithm;
+    if (!root.contains(CNS_TAG_ALG)) {
+        std::cout << "Error! No '" << CNS_TAG_ALG << "' tag found in JSON file!" << std::endl;
         return false;
     }
+    algorithm = root[CNS_TAG_ALG];
 
-    element = algorithm->FirstChildElement(CNS_TAG_ST);
-    if (!element) {
-        std::cout << "Error! No '" << CNS_TAG_ST << "' tag found in XML file!" << std::endl;
+    json element;
+    if (!algorithm.contains(CNS_TAG_ST)) {
+        std::cout << "Error! No '" << CNS_TAG_ST << "' tag found in JSON file!" << std::endl;
         return false;
     }
-    if (element->GetText())
-        value = element->GetText();
+    element = algorithm[CNS_TAG_ST];
+    if (!element.is_string())
+        value = to_string(element);
+    else
+        value = element;
     std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 
-    if (value == CNS_SP_ST_BFS) {
-        N = 4;
-        SearchParams = new double[N];
-        SearchParams[CN_SP_ST] = CN_SP_ST_BFS;
-    }
-    else if (value == CNS_SP_ST_DIJK) {
-        N = 4;
-        SearchParams = new double[N];
-        SearchParams[CN_SP_ST] = CN_SP_ST_DIJK;
-    }
-    else if (value == CNS_SP_ST_ASTAR || value == CNS_SP_ST_JP_SEARCH || value == CNS_SP_ST_TH) {
+    if (value == CNS_SP_ST_ASTAR || value == CNS_SP_ST_SIPP || value == CNS_SP_ST_PBS) {
         N = 7;
         SearchParams = new double[N];
         SearchParams[CN_SP_ST] = CN_SP_ST_ASTAR;
-        if (value == CNS_SP_ST_JP_SEARCH)
-            SearchParams[CN_SP_ST] = CN_SP_ST_JP_SEARCH;
-        else if (value == CNS_SP_ST_TH)
-            SearchParams[CN_SP_ST] = CN_SP_ST_TH;
-        element = algorithm->FirstChildElement(CNS_TAG_HW);
-        if (!element) {
+        if (value == CNS_SP_ST_SIPP)
+            SearchParams[CN_SP_ST] = CN_SP_ST_SIPP;
+        else if (value == CNS_SP_ST_PBS)
+            SearchParams[CN_SP_ST] = CN_SP_ST_PBS;
+        if (!algorithm.contains(CNS_TAG_HW)) {
             std::cout << "Warning! No '" << CNS_TAG_HW << "' tag found in algorithm section." << std::endl;
             std::cout << "Value of '" << CNS_TAG_HW << "' was defined to 1." << std::endl;
             SearchParams[CN_SP_HW] = 1;
-        }
-        else {
-            stream << element->GetText();
-            stream >> SearchParams[CN_SP_HW];
-            stream.str("");
-            stream.clear();
+        } else {
+            element = algorithm[CNS_TAG_HW];
+            if (element.is_number()) {
+                SearchParams[CN_SP_HW] = static_cast<double>(element);
 
-            if (SearchParams[CN_SP_HW] < 1) {
-                std::cout << "Warning! Value of '" << CNS_TAG_HW << "' tag is not correctly specified. Should be >= 1."
-                          << std::endl;
+                if (SearchParams[CN_SP_HW] < 1) {
+                    std::cout << "Warning! Value of '" << CNS_TAG_HW << "' tag is not correctly specified. Should be >= 1."
+                              << std::endl;
+                    std::cout << "Value of '" << CNS_TAG_HW << "' was defined to 1." << std::endl;
+                    SearchParams[CN_SP_HW] = 1;
+                }
+            } else {
+                std::cout << "Warning! Value of '" << CNS_TAG_HW << "' tag is not correctly specified." << std::endl;
                 std::cout << "Value of '" << CNS_TAG_HW << "' was defined to 1." << std::endl;
                 SearchParams[CN_SP_HW] = 1;
             }
         }
 
-        element = algorithm->FirstChildElement(CNS_TAG_MT);
-        if (!element) {
-            std::cout << "Warning! No '" << CNS_TAG_MT << "' tag found in XML file." << std::endl;
+        if (!algorithm.contains(CNS_TAG_MT)) {
+            std::cout << "Warning! No '" << CNS_TAG_MT << "' tag found in JSON file." << std::endl;
             std::cout << "Value of '" << CNS_TAG_MT << "' was defined to 'euclidean'." << std::endl;
             SearchParams[CN_SP_MT] = CN_SP_MT_EUCL;
-        }
-        else {
-            if (element->GetText())
-                value = element->GetText();
+        } else {
+            element = algorithm[CNS_TAG_MT];
+            if (!element.is_string())
+                value = to_string(element);
+            else
+                value = element;
             std::transform(value.begin(), value.end(), value.begin(), ::tolower);
             if (value == CNS_SP_MT_MANH) SearchParams[CN_SP_MT] = CN_SP_MT_MANH;
             else if (value == CNS_SP_MT_EUCL) SearchParams[CN_SP_MT] = CN_SP_MT_EUCL;
@@ -108,20 +108,21 @@ bool Config::getConfig(const char *FileName)
                 std::cout << "Value of '" << CNS_TAG_MT << "' was defined to 'euclidean'" << std::endl;
                 SearchParams[CN_SP_MT] = CN_SP_MT_EUCL;
             }
-            if (SearchParams[CN_SP_ST] == CN_SP_ST_TH && SearchParams[CN_SP_MT] != CN_SP_MT_EUCL) {
-                std::cout << "Warning! This type of metric is not admissible for Theta*!" << std::endl;
-            }
+            // if (SearchParams[CN_SP_ST] == CN_SP_ST_TH && SearchParams[CN_SP_MT] != CN_SP_MT_EUCL) {
+            //     std::cout << "Warning! This type of metric is not admissible for Theta*!" << std::endl;
+            // }
         }
 
-
-        element = algorithm->FirstChildElement(CNS_TAG_BT);
-        if (!element) {
-            std::cout << "Warning! No '" << CNS_TAG_BT << "' tag found in XML file" << std::endl;
+        if (!algorithm.contains(CNS_TAG_BT)) {
+            std::cout << "Warning! No '" << CNS_TAG_BT << "' tag found in JSON file" << std::endl;
             std::cout << "Value of '" << CNS_TAG_BT << "' was defined to 'g-max'" << std::endl;
             SearchParams[CN_SP_BT] = CN_SP_BT_GMAX;
-        }
-        else {
-            value = element->GetText();
+        } else {
+            element = algorithm[CNS_TAG_BT];
+            if (!element.is_string())
+                value = to_string(element);
+            else
+                value = element;
             std::transform(value.begin(), value.end(), value.begin(), ::tolower);
             if (value == CNS_SP_BT_GMIN) SearchParams[CN_SP_BT] = CN_SP_BT_GMIN;
             else if (value == CNS_SP_BT_GMAX) SearchParams[CN_SP_BT] = CN_SP_BT_GMAX;
@@ -131,29 +132,26 @@ bool Config::getConfig(const char *FileName)
                 SearchParams[CN_SP_BT] = CN_SP_BT_GMAX;
             }
         }
-    }
-    else {
+    } else {
         std::cout << "Error! Value of '" << CNS_TAG_ST << "' tag (algorithm name) is not correctly specified."
                   << std::endl;
-        std::cout << "Supported algorithm's names are: '" << CNS_SP_ST_BFS << "', '" << CNS_SP_ST_DIJK << "', '"
-                  << CNS_SP_ST_ASTAR << "', '" << CNS_SP_ST_TH << "', '" << CNS_SP_ST_JP_SEARCH << "'." << std::endl;
+        std::cout << "Supported algorithm's names are: '" << CNS_SP_ST_ASTAR << "', '" << CNS_SP_ST_SIPP << "', '"
+                  << CNS_SP_ST_PBS << "'." << std::endl;
         return false;
     }
 
 
-    element = algorithm->FirstChildElement(CNS_TAG_AD);
-    if (!element) {
-        std::cout << "Warning! No '" << CNS_TAG_AD << "' element found in XML file." << std::endl;
+    if (!algorithm.contains(CNS_TAG_AD)) {
+        std::cout << "Warning! No '" << CNS_TAG_AD << "' element found in JSON file." << std::endl;
         std::cout << "Value of '" << CNS_TAG_AD << "' was defined to default - true" << std::endl;
         SearchParams[CN_SP_AD] = 1;
-    }
-    else {
+    } else {
+        element = algorithm[CNS_TAG_AD];
         std::string check;
-        stream << element->GetText();
-        stream >> check;
-        stream.clear();
-        stream.str("");
-
+        if (!element.is_string())
+            check = to_string(element);
+        else
+            check = element;
         if (check != "1" && check != "true" && check != "0" && check != "false") {
             std::cout << "Warning! Value of '" << CNS_TAG_AD << "' is not correctly specified." << std::endl;
             std::cout << "Value of '" << CNS_TAG_AD << "' was defined to default - true " << std::endl;
@@ -168,26 +166,23 @@ bool Config::getConfig(const char *FileName)
     if (SearchParams[CN_SP_AD] == 0) {
         SearchParams[CN_SP_CC] = 0;
         SearchParams[CN_SP_AS] = 0;
-    }
-    else {
-        element = algorithm->FirstChildElement(CNS_TAG_CC);
-        if (!element) {
-            std::cout << "Warning! No '" << CNS_TAG_CC << "' element found in XML file." << std::endl;
+    } else {
+        if (!algorithm.contains(CNS_TAG_CC)) {
+            std::cout << "Warning! No '" << CNS_TAG_CC << "' element found in JSON file." << std::endl;
             std::cout << "Value of '" << CNS_TAG_CC << "' was defined to default - false" << std::endl;
             SearchParams[CN_SP_CC] = 0;
-        }
-        else {
+        } else {
+            element = algorithm[CNS_TAG_CC];
             std::string check;
-            stream << element->GetText();
-            stream >> check;
-            stream.clear();
-            stream.str("");
+            if (!element.is_string())
+                check = to_string(element);
+            else
+                check = element;
             if (check != "1" && check != "true" && check != "0" && check != "false") {
                 std::cout << "Warning! Value of '" << CNS_TAG_CC << "' is not correctly specified." << std::endl;
                 std::cout << "Value of '" << CNS_TAG_CC << "' was defined to default - false" << std::endl;
                 SearchParams[CN_SP_CC] = 0;
-            }
-            else {
+            } else {
                 if (check == "1" || check == "true")
                     SearchParams[CN_SP_CC] = 1;
                 else
@@ -196,26 +191,23 @@ bool Config::getConfig(const char *FileName)
         }
         if (SearchParams[CN_SP_CC] == 0) {
             SearchParams[CN_SP_AS] = 0;
-        }
-        else {
-            element = algorithm->FirstChildElement(CNS_TAG_AS);
-            if (!element) {
-                std::cout << "Warning! No '" << CNS_TAG_AS << "' element found in XML file." << std::endl;
+        } else {
+            if (!algorithm.contains(CNS_TAG_AS)) {
+                std::cout << "Warning! No '" << CNS_TAG_AS << "' element found in JSON file." << std::endl;
                 std::cout << "Value of '" << CNS_TAG_AS << "' was defined to default - false." << std::endl;
                 SearchParams[CN_SP_AS] = 0;
-            }
-            else {
+            } else {
+                element = algorithm[CNS_TAG_AS];
                 std::string check;
-                stream << element->GetText();
-                stream >> check;
-                stream.clear();
-                stream.str("");
+                if (!element.is_string())
+                    check = to_string(element);
+                else
+                    check = element;
                 if (check != "1" && check != "true" && check != "0" && check != "false") {
                     std::cout << "Warning! Value of '" << CNS_TAG_AS << "' is not correctly specified." << std::endl;
                     std::cout << "Value of '" << CNS_TAG_AS << "' was defined to default - false." << std::endl;
                     SearchParams[CN_SP_AS] = 0;
-                }
-                else {
+                } else {
                     if (check == "1" || check == "true")
                         SearchParams[CN_SP_AS] = 1;
                     else
@@ -225,28 +217,26 @@ bool Config::getConfig(const char *FileName)
         }
     }
 
-    options = root->FirstChildElement(CNS_TAG_OPT);
     LogParams = new std::string[3];
     LogParams[CN_LP_PATH] = "";
     LogParams[CN_LP_NAME] = "";
 
-    if (!options) {
-        std::cout << "Warning! No '" << CNS_TAG_OPT << "' tag found in XML file." << std::endl;
+    if (!root.contains(CNS_TAG_OPT)) {
+        std::cout << "Warning! No '" << CNS_TAG_OPT << "' tag found in JSON file." << std::endl;
         std::cout << "Value of '" << CNS_TAG_LOGLVL << "' tag was defined to 'short log' (1)." << std::endl;
         LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_SHORT_WORD;
-    }
-    else {
-        element = options->FirstChildElement(CNS_TAG_LOGLVL);
-        if (!element) {
-            std::cout << "Warning! No '" << CNS_TAG_LOGLVL << "' tag found in XML file." << std::endl;
+    } else {
+        json options = root[CNS_TAG_OPT];
+        if (!options.contains(CNS_TAG_LOGLVL)) {
+            std::cout << "Warning! No '" << CNS_TAG_LOGLVL << "' tag found in JSON file." << std::endl;
             std::cout << "Value of '" << CNS_TAG_LOGLVL << "' tag was defined to 'short log' (1)." << std::endl;
             LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_SHORT_WORD;
-        }
-        else {
-            stream << element->GetText();
-            stream >> value;
-            stream.str("");
-            stream.clear();
+        } else {
+            element = options[CNS_TAG_LOGLVL];
+            if (!element.is_string())
+                value = to_string(element);
+            else
+                value = element;
             //std::transform(value.begin(), value.end(), value.begin(), ::tolower);
             if (value == CN_LP_LEVEL_NOPE_WORD || value == CN_LP_LEVEL_NOPE_VALUE)
                 LogParams[CN_LP_LEVEL] = CN_LP_LEVEL_NOPE_WORD;
@@ -267,35 +257,35 @@ bool Config::getConfig(const char *FileName)
         }
 
 
-        element = options->FirstChildElement(CNS_TAG_LOGPATH);
-        if (!element) {
-            std::cout << "Warning! No '" << CNS_TAG_LOGPATH << "' tag found in XML file." << std::endl;
+        if (!options.contains(CNS_TAG_LOGPATH)) {
+            std::cout << "Warning! No '" << CNS_TAG_LOGPATH << "' tag found in JSON file." << std::endl;
             std::cout << "Value of '" << CNS_TAG_LOGPATH << "' tag was defined to 'current directory'." << std::endl;
-        }
-        else if (!element->GetText()) {
-            std::cout << "Warning! Value of '" << CNS_TAG_LOGPATH << "' tag is missing!" << std::endl;
-            std::cout << "Value of '" << CNS_TAG_LOGPATH << "' tag was defined to 'current directory'." << std::endl;
-        }
-        else {
-            LogParams[CN_LP_PATH] = element->GetText();
+        } else {
+            element = options[CNS_TAG_LOGPATH];
+            if (!element.is_string()) {
+                std::cout << "Warning! Value of '" << CNS_TAG_LOGPATH << "' tag is missing!" << std::endl;
+                std::cout << "Value of '" << CNS_TAG_LOGPATH << "' tag was defined to 'current directory'." << std::endl;
+            } else {
+                LogParams[CN_LP_PATH] = element;
+            }
         }
 
 
-        element = options->FirstChildElement(CNS_TAG_LOGFN);
-        if (!element) {
-            std::cout << "Warning! No '" << CNS_TAG_LOGFN << "' tag found in XML file!" << std::endl;
+        if (!options.contains(CNS_TAG_LOGFN)) {
+            std::cout << "Warning! No '" << CNS_TAG_LOGFN << "' tag found in JSON file!" << std::endl;
             std::cout << "Value of '" << CNS_TAG_LOGFN
                       << "' tag was defined to default (original filename +'_log' + original file extension."
                       << std::endl;
+        } else {
+            element = options[CNS_TAG_LOGFN];
+            if (!element.is_string()) {
+                std::cout << "Warning! Value of '" << CNS_TAG_LOGFN << "' tag is missing." << std::endl;
+                std::cout << "Value of '" << CNS_TAG_LOGFN
+                          << "' tag was defined to default (original filename +'_log' + original file extension."
+                          << std::endl;
+            } else
+                LogParams[CN_LP_NAME] = element;
         }
-        else if (!element->GetText()) {
-            std::cout << "Warning! Value of '" << CNS_TAG_LOGFN << "' tag is missing." << std::endl;
-            std::cout << "Value of '" << CNS_TAG_LOGFN
-                      << "' tag was defined to default (original filename +'_log' + original file extension."
-                      << std::endl;
-        }
-        else
-            LogParams[CN_LP_NAME] = element->GetText();
     }
     return true;
 }

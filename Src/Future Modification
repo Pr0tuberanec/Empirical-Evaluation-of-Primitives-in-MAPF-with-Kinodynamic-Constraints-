@@ -1,0 +1,2 @@
+1. Добавить в Search.h поле free_timesteps_table_edges. Саму эту таблицу заполнять в dynobs.h
+   аналогично free_timesteps_table. Заменить после этого в SIPP проверку ячеек на 

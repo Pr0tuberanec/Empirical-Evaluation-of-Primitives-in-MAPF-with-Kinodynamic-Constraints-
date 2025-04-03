@@ -1,5 +1,11 @@
 #include "map.h"
+#include "json.hpp"
+#include <fstream>
+#include <set>
+#include <random>
+#include <iostream>
 
+using json = nlohmann::json;
 Map::Map()
 {
     height = -1;
@@ -38,48 +44,50 @@ bool Map::CellOnGrid(int i, int j) const
 
 bool Map::getMap(const char *FileName)
 {
-    int rowiter = 0, grid_i = 0, grid_j = 0;
+    int grid_i = 0, grid_j = 0;
 
-    tinyxml2::XMLElement *root = 0, *map = 0, *element = 0, *mapnode;
-
-    std::string value;
     std::stringstream stream;
 
     bool hasGridMem = false, hasGrid = false, hasHeight = false, hasWidth = false, hasSTX = false, hasSTY = false, hasFINX = false, hasFINY = false, hasCellSize = false;
 
-    tinyxml2::XMLDocument doc;
+    std::string value;
+    std::ifstream file(FileName);
+    if (!json::accept(file))
+    {
+        std::cout << "Error opening JSON file!" << std::endl;
+        return false;
+    }
+    nlohmann::ordered_json objJson = nlohmann::ordered_json::parse(std::ifstream(FileName));
 
-    // Load XML File
-    if (doc.LoadFile(FileName) != tinyxml2::XMLError::XML_SUCCESS) {
-        std::cout << "Error opening XML file!" << std::endl;
+    nlohmann::ordered_json root;
+    if (!objJson.contains(CNS_TAG_ROOT)) {
+        std::cout << "Error! No '" << CNS_TAG_ROOT << "' element found in JSON file!" << std::endl;
         return false;
     }
-    // Get ROOT element
-    root = doc.FirstChildElement(CNS_TAG_ROOT);
-    if (!root) {
-        std::cout << "Error! No '" << CNS_TAG_ROOT << "' tag found in XML file!" << std::endl;
-        return false;
-    }
+    root = objJson[CNS_TAG_ROOT];
 
     // Get MAP element
-    map = root->FirstChildElement(CNS_TAG_MAP);
-    if (!map) {
-        std::cout << "Error! No '" << CNS_TAG_MAP << "' tag found in XML file!" << std::endl;
+    if (!root.contains(CNS_TAG_MAP)) {
+        std::cout << "Error! No '" << CNS_TAG_MAP << "' tag found in JSON file!" << std::endl;
         return false;
     }
+    nlohmann::ordered_json map = root[CNS_TAG_MAP];
 
-    for (mapnode = map->FirstChildElement(); mapnode; mapnode = mapnode->NextSiblingElement()) {
-        element = mapnode->ToElement();
-        value = mapnode->Value();
-        std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+    for (auto element = map.begin(); element != map.end(); element++) {
 
         stream.str("");
         stream.clear();
 
-        if(value != CNS_TAG_GRID)
+        if(element.key() != CNS_TAG_GRID)
         {
-           stream << element->GetText();
+            if (!element.value().is_string())
+                value = to_string(element.value());
+            else
+                value = element.value();
+            stream << value;
         }
+        value = element.key();
+
 
         if (!hasGridMem && hasHeight && hasWidth) { 
             Grid = std::shared_ptr<std::shared_ptr<int[]>[]>(new std::shared_ptr<int[]>[height]);
@@ -102,7 +110,7 @@ bool Map::getMap(const char *FileName)
                     std::cout << "Warning! Invalid value of '" << CNS_TAG_HEIGHT
                               << "' tag encountered (or could not convert to integer)." << std::endl;
                     std::cout << "Value of '" << CNS_TAG_HEIGHT << "' tag should be an integer >=0" << std::endl;
-                    std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_HEIGHT
+                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_HEIGHT
                               << "' tag will be encountered later..." << std::endl;
                 }
                 else
@@ -119,7 +127,7 @@ bool Map::getMap(const char *FileName)
                     std::cout << "Warning! Invalid value of '" << CNS_TAG_WIDTH
                               << "' tag encountered (or could not convert to integer)." << std::endl;
                     std::cout << "Value of '" << CNS_TAG_WIDTH << "' tag should be an integer AND >0" << std::endl;
-                    std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_WIDTH
+                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_WIDTH
                               << "' tag will be encountered later..." << std::endl;
 
                 }
@@ -139,7 +147,7 @@ bool Map::getMap(const char *FileName)
                               << "' tag encountered (or could not convert to double)." << std::endl;
                     std::cout << "Value of '" << CNS_TAG_CELLSIZE
                               << "' tag should be double AND >0. By default it is defined to '1'" << std::endl;
-                    std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_CELLSIZE
+                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_CELLSIZE
                               << "' tag will be encountered later..." << std::endl;
                 }
                 else
@@ -163,7 +171,7 @@ bool Map::getMap(const char *FileName)
                               << "' tag encountered (or could not convert to integer)" << std::endl;
                     std::cout << "Value of '" << CNS_TAG_STX << "' tag should be an integer AND >=0 AND < '"
                               << CNS_TAG_WIDTH << "' value, which is " << width << std::endl;
-                    std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_STX
+                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_STX
                               << "' tag will be encountered later..." << std::endl;
                 }
                 else
@@ -187,7 +195,7 @@ bool Map::getMap(const char *FileName)
                               << "' tag encountered (or could not convert to integer)" << std::endl;
                     std::cout << "Value of '" << CNS_TAG_STY << "' tag should be an integer AND >=0 AND < '"
                               << CNS_TAG_HEIGHT << "' value, which is " << height << std::endl;
-                    std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_STY
+                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_STY
                               << "' tag will be encountered later..." << std::endl;
                 }
                 else
@@ -211,7 +219,7 @@ bool Map::getMap(const char *FileName)
                               << "' tag encountered (or could not convert to integer)" << std::endl;
                     std::cout << "Value of '" << CNS_TAG_FINX << "' tag should be an integer AND >=0 AND < '"
                               << CNS_TAG_WIDTH << "' value, which is " << width << std::endl;
-                    std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_FINX
+                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_FINX
                               << "' tag will be encountered later..." << std::endl;
                 }
                 else
@@ -235,7 +243,7 @@ bool Map::getMap(const char *FileName)
                               << "' tag encountered (or could not convert to integer)" << std::endl;
                     std::cout << "Value of '" << CNS_TAG_FINY << "' tag should be an integer AND >=0 AND < '"
                               << CNS_TAG_HEIGHT << "' value, which is " << height << std::endl;
-                    std::cout << "Continue reading XML and hope correct value of '" << CNS_TAG_FINY
+                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_FINY
                               << "' tag will be encountered later..." << std::endl;
                 }
                 else
@@ -249,9 +257,9 @@ bool Map::getMap(const char *FileName)
                           << CNS_TAG_GRID << "'tag encountered!" << std::endl;
                 return false;
             }
-            element = mapnode->FirstChildElement();
+            nlohmann::ordered_json grid = element.value();
             while (grid_i < height) {
-                if (!element) {
+                if (grid[grid_i].empty()) {
                     std::cout << "Error! Not enough '" << CNS_TAG_ROW << "' tags inside '" << CNS_TAG_GRID << "' tag."
                               << std::endl;
                     std::cout << "Number of '" << CNS_TAG_ROW
@@ -259,23 +267,11 @@ bool Map::getMap(const char *FileName)
                               << "' tag which is " << height << std::endl;
                     return false;
                 }
-                std::string str = element->GetText();
-                std::vector<std::string> elems;
-                std::stringstream ss(str);
-                std::string item;
-                while (std::getline(ss, item, ' '))
-                    elems.push_back(item);
-                rowiter = grid_j = 0;
-                int val;
-                if (elems.size() > 0)
+                grid_j = 0;
+                nlohmann::json cur = json::parse(std::string(grid[grid_i]));
+                if (cur.size() == width)
                     for (grid_j = 0; grid_j < width; ++grid_j) {
-                        if (grid_j == elems.size())
-                            break;
-                        stream.str("");
-                        stream.clear();
-                        stream << elems[grid_j];
-                        stream >> val;
-                        Grid[grid_i][grid_j] = val;
+                        Grid[grid_i][grid_j] = cur[grid_j];
                     }
 
                 if (grid_j != width) {
@@ -284,14 +280,12 @@ bool Map::getMap(const char *FileName)
                     return false;
                 }
                 ++grid_i;
-
-                element = element->NextSiblingElement();
             }
         }
     }
     //some additional checks
     if (!hasGrid) {
-        std::cout << "Error! There is no tag 'grid' in xml-file!\n";
+        std::cout << "Error! There is no tag 'grid' in json-file!\n";
         return false;
     }
     if (!(hasFINX && hasFINY && hasSTX && hasSTY))
@@ -311,8 +305,6 @@ bool Map::getMap(const char *FileName)
 
     return true;
 }
-
-
 
 int Map::getValue(int i, int j) const
 {

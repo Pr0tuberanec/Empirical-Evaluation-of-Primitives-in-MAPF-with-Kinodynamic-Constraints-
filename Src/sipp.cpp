@@ -31,8 +31,6 @@ void SIPP::initializeSearch() {
     hppath.clear();
     sresult = SearchResult();
 
-    //timeIntervalBuilding(free_timesteps_table, obstacles_paths, map);
-
     int start_pos = map->start_i * map->width + map->start_j;
     int start_t = free_timesteps_table->count(start_pos) ?
                   (*free_timesteps_table)[start_pos][0].first : 0;
@@ -42,6 +40,7 @@ void SIPP::initializeSearch() {
     TimeNode startNode(map->start_i, map->start_j, 0,
                        computeHFromCellToCell(map->start_i, map->start_j, map->goal_i, map->goal_j, *options),
                        hweight, start_t, end_t, 0);
+
     open.Add(startNode);
 }
 
@@ -90,8 +89,8 @@ SearchResult SIPP::startSearch() {
         processNode(curNode);
     }
 
-    //logger->writeToLogObstaclesPath(obstacles_paths);
     updateSearchResult(&curNode, found, start);
+    logger->writeToLogObstaclesPath(obstacles_paths);
     return sresult;
 }
 
@@ -106,16 +105,19 @@ TimeNode SIPP::getMin()
 bool SIPP::checkIntersection(TimeNode curNode, Node newNode, int cur_time) {
     if (!obstacles_paths->empty()) {
         for (size_t obs_idx = 0; obs_idx < obstacles_paths->size(); ++obs_idx) {
-            if ((((*obstacles_paths)[obs_idx][cur_time + 1].i == curNode.i) &&
-                 ((*obstacles_paths)[obs_idx][cur_time + 1].j == curNode.j)) &&
-                (((*obstacles_paths)[obs_idx][cur_time].i == newNode.i) &&
-                 ((*obstacles_paths)[obs_idx][cur_time].j == newNode.j))) {
-                return true;
+            const auto& obs_path = (*obstacles_paths)[obs_idx];
+
+            if (cur_time + 1 < obs_path.size()) {
+                if ((obs_path[cur_time + 1].i == curNode.i && obs_path[cur_time + 1].j == curNode.j) &&
+                    (obs_path[cur_time].i == newNode.i && obs_path[cur_time].j == newNode.j)) {
+                    return true;
+                }
             }
         }
     }
     return false;
 }
+
 
 std::vector<std::pair<int, int>> SIPP::getFreeTimesteps(int nodeIdx) {
     
@@ -142,7 +144,7 @@ void SIPP::getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors) {
     successors.clear();
     std::vector<std::pair<int, int>> side_moves = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}}; //, Point(0, 0)};
     for (const auto& move : side_moves) {
-        Node tmp(curNode.j + move.first, curNode.i + move.second, curNode.g,
+        Node tmp(curNode.i + move.first, curNode.j + move.second, curNode.g,
                  computeHFromCellToCell(map->start_i, map->start_j, map->goal_i, map->goal_j, *options),
                  hweight);
         int nodeIdx = tmp.i * map->width + tmp.j;
@@ -172,7 +174,7 @@ void SIPP::getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors) {
             TimeNode newNode(tmp.i, tmp.j, curNode.g + 1,
                              computeHFromCellToCell(tmp.i, tmp.j, map->goal_i, map->goal_j, *options), 
                              hweight, start_t, end_t, earliest_time, nullptr);
-            successors.push_back(newNode);
+            successors.emplace_back(newNode);
         }
     }
 }

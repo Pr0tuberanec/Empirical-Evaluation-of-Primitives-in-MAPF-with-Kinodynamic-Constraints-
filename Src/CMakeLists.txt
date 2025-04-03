@@ -1,32 +1,33 @@
 
-set(HEADERS         config.h
+set(HEADERS         astar.h
+                    config.h
+                    dynobs.h
                     environmentoptions.h
                     gl_const.h
+                    heap.h
                     ilogger.h
                     map.h
                     mission.h
                     node.h
                     search.h
                     searchresult.h
+                    sipp.h
                     tinyxml2.h
                     xmllogger.h)
 
-set(SOURCES         config.cpp
+set(SOURCES         astar.cpp
+                    config.cpp
+                    dynobs.cpp
                     environmentoptions.cpp
+                    heap.cpp
+                    json.hpp
+                    main.cpp
                     map.cpp
                     mission.cpp
                     search.cpp
+                    sipp.cpp
                     tinyxml2.cpp
-                    xmllogger.cpp)
+                    xmllogger.cpp )
 
-add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} main.cpp)
-
-add_library(PPLIB ${HEADERS} ${SOURCES})
-
-install(TARGETS ${PROJECT_NAME} 
-        CONFIGURATIONS Debug
-        DESTINATION Bin/Debug)
-
-install(TARGETS ${PROJECT_NAME}
-        CONFIGURATIONS Release
-        DESTINATION Bin/Release)
+add_library(PPLIB STATIC ${SOURCES} ${HEADERS})  # Создаём статическую библиотеку
+target_include_directories(PPLIB PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

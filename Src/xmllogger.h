@@ -1,41 +1,38 @@
 #ifndef XMLLOGGER_H
-#define	XMLLOGGER_H
+#define XMLLOGGER_H
 
+#include "json.hpp"
 #include "ilogger.h"
-#include <memory>
-#include "tinyxml2.h"
+#include "node.h"
+#include <vector>
 
+    // Класс для вывода данных в JSON
+    class JsonLogger : public ILogger {
+    public:
+        explicit JsonLogger(const std::string& loglevel) : ILogger(loglevel) {}
 
-//That's the class that flushes the data to the output XML
+        ~JsonLogger() override = default;
 
+        bool getLog(const char* fileName, const std::string* logParams) override;
+        void saveLog() override;
 
-class XmlLogger : public ILogger {
+        //void writeToLogOpenClose(const std::vector<std::list<Node> > &open,
+        //                         const std::unordered_map<int, Node> &close,
+        //                         bool last);
+        void writeToLogMap(const Map& map, const std::list<std::shared_ptr<Node>>& path) override;
+        void writeToLogObstaclesPath(const std::vector<std::vector<Node>>* obstacles_paths) override;
+        void writeToLogPath(const std::list<std::shared_ptr<Node>>& path) override;
+        void writeToLogHPpath(const std::list<std::shared_ptr<Node>>& hppath) override;
+        void writeToLogNotFound() override;
 
-public:
-    XmlLogger(std::string loglevel):ILogger(loglevel){}
+        void writeToLogSummary(unsigned int numberOfSteps, unsigned int nodesCreated,
+                               float length, double time, double cellSize) override;
 
-    virtual ~XmlLogger() {};
+        // void setLogFilename(const std::string& file) override;
 
-    bool getLog(const char *FileName, const std::string *LogParams);
+    private:
+        std::string LogFileName;
+        nlohmann::ordered_json objJson;
+    };
 
-    void saveLog();
-
-    void writeToLogMap(const Map &Map, const std::list<std::shared_ptr<Node>>& path);
-
-    //void writeToLogOpenClose(const typename &open, const typename &close);
-
-    void writeToLogPath(const std::list<std::shared_ptr<Node>>& path);
-
-    void writeToLogHPpath(const std::list<std::shared_ptr<Node>>& hppath);
-
-    void writeToLogNotFound();
-
-    void writeToLogSummary(unsigned int numberofsteps, unsigned int nodescreated, float length, double time, double cellSize);
-
-private:
-    std::string LogFileName;
-    tinyxml2::XMLDocument doc;
-};
-
-#endif
-
+#endif // XMLLOGGER_H

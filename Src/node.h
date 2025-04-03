@@ -42,15 +42,15 @@ struct TimeNode : public Node
 
     TimeNode(){}
 
-    TimeNode(int cur_i, int cur_j, double cur_g, double cur_H, double hweight, int l_bnd_t,
-             int r_bnd_t, int tm, TimeNode* cur_parent=nullptr) {
-       Node(cur_i, cur_j, cur_g, cur_H, g + hweight * H);
+    TimeNode(int cur_i, int cur_j, double cur_g, double cur_H, double hweight, 
+        int l_bnd_t, int r_bnd_t, int tm, TimeNode* cur_parent = nullptr)
+        : Node(cur_i, cur_j, cur_g, cur_H, hweight) {
+        start_t = l_bnd_t;
+        end_t = r_bnd_t;
+        t = tm;
+        parent = cur_parent;
+    }
 
-       start_t = l_bnd_t;
-       end_t = r_bnd_t;
-       t = tm;
-       parent = cur_parent;
-   }
 
     ~TimeNode() {}
 

@@ -13,6 +13,7 @@ SOURCES += \
     config.cpp \
     environmentoptions.cpp \
     heap.cpp \
+    json.hpp \
     main.cpp \
     map.cpp \
     mission.cpp \

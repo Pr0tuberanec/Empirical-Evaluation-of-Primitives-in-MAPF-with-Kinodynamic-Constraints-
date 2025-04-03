@@ -65,10 +65,12 @@ void DynObs::AddIntervalToMaxTime(const std::unordered_map<int, int>& timesteps,
 
 void DynObs::timeIntervalBuilding(const Map& map) {
     if (!obstacles_paths.empty()) {
-        auto max_time = std::max_element(obstacles_paths.begin(), obstacles_paths.end(),
-        [](const std::vector<Node>& a, const std::vector<Node>& b) {
-            return a.size() < b.size();
-        })->size();
+        // auto max_time = std::max_element(obstacles_paths.begin(), obstacles_paths.end(),
+        // [](const std::vector<Node>& a, const std::vector<Node>& b) {
+        //     return a.size() < b.size();
+        // })->size();
+        //size_t max_time = map.width * map.height - 1;
+        size_t max_time = 200;
 
         int current_cell;
         int previous_time_step;

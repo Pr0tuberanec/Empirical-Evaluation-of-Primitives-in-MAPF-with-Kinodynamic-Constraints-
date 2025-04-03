@@ -4,6 +4,7 @@
 #include "node.h"
 
 #include <list>
+#include <memory>
 
 //That's the output structure for the search algorithms.
 //The task of the pathfinder is to fill it in a right way.

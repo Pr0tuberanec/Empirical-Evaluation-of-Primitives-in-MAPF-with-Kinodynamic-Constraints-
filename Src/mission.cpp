@@ -34,7 +34,7 @@ bool Mission::getConfig()
 bool Mission::createLog()
 {
     if (logger != nullptr) delete logger;
-    logger = new XmlLogger(config.LogParams[CN_LP_LEVEL]);
+    logger = new JsonLogger(config.LogParams[CN_LP_LEVEL]);
     return logger->getLog(fileName, config.LogParams);
 }
 
@@ -50,6 +50,8 @@ void Mission::createSearch()
 {
     if (config.SearchParams[CN_SP_ST] == CN_SP_ST_ASTAR)
         search = new Astar(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT]);
+    if (config.SearchParams[CN_SP_ST] == CN_SP_ST_SIPP)
+        search = new SIPP(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT]);
 }
 
 void Mission::startSearch()
@@ -58,7 +60,8 @@ void Mission::startSearch()
     search->SetMap(&map);
     search->SetOptions(&options);
 
-    dyn_obs_creator.createDynObstacles(logger, &map, &options, 10, 0);
+    dyn_obs_creator.createDynObstacles(logger, &map, &options, 10, 1512);
+    dyn_obs_creator.timeIntervalBuilding(map);
     search->SetPtrFreeTimestepsTable(dyn_obs_creator.GetPtrFreeTimestepsTable());
     search->SetPtrObstaclesPaths(dyn_obs_creator.GetPtrObstaclesPaths());
     sr = search->startSearch();

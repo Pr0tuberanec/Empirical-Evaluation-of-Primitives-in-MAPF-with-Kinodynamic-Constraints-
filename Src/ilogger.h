@@ -17,6 +17,7 @@ class ILogger
         //virtual void writeToLogOpenClose(const typename &open, const typename &close) = 0;
         virtual void writeToLogPath(const std::list<std::shared_ptr<Node>>& path) = 0;
         virtual void writeToLogHPpath(const std::list<std::shared_ptr<Node>>& path) = 0;
+        virtual void writeToLogObstaclesPath(const std::vector<std::vector<Node>>* obstacles_paths) = 0;
         virtual void writeToLogNotFound() = 0;
         virtual void writeToLogSummary(unsigned int numberofsteps, unsigned int nodescreated, float length, double time, double cellSize) = 0;
         virtual ~ILogger() {};

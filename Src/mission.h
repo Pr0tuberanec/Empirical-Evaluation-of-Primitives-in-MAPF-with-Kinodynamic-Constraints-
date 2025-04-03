@@ -10,6 +10,7 @@
 #include "searchresult.h"
 #include "environmentoptions.h"
 #include "search.h"
+#include "sipp.h"
 #include "xmllogger.h"
 
 //That's the wrap up class that first creates all the needed objects (Map, Search etc.)
