@@ -21,7 +21,7 @@ void Astar::getSuccessors(const Node& curNode) {
     for (const auto& move : side_moves) {
         Node neighbour(curNode.i + move.first, curNode.j + move.second, curNode.g +
                        computeCostToNeighbour(curNode.i, curNode.j, curNode.i + move.first,
-                                              curNode.j + move.second, *options),
+                                              curNode.j + move.second),
                        computeHFromCellToCell(curNode.i + move.first, curNode.j + move.second,
                                               map->goal_i, map->goal_j, *options));
 

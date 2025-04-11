@@ -46,6 +46,9 @@ class Mission
         SearchResult            sr;
 
         DynObs                  dyn_obs_creator;
+        double                  T_max;
+        int                     seed;
+        int                     number_of_obstacles;
 };
 
 #endif

@@ -18,14 +18,7 @@ Map::Map()
     cellSize = 1;
 }
 
-Map::~Map()
-{
-    // if (Grid) {
-    //     for (int i = 0; i < height; ++i)
-    //         delete[] Grid[i];
-    //     delete[] Grid;
-    // }
-}
+Map::~Map() {}
 
 bool Map::CellIsTraversable(int i, int j) const
 {

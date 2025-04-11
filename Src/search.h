@@ -19,9 +19,13 @@ class Search
         void SetLogger(ILogger* inp_logger) { logger = inp_logger; };
         void SetMap(Map* inp_map) { map = inp_map; };
         void SetOptions(EnvironmentOptions* inp_options) { options = inp_options; };
+        void SetTMax(double max_time) { T_max = max_time; }
         void SetPtrFreeTimestepsTable(
             std::unordered_map<int, std::vector<std::pair<int, int>>>* table) {
             free_timesteps_table = table;
+        }
+        void SetPtrObstaclesTable(std::unordered_map<int, int>* table) {
+            obstacles_table = table;
         }
         void SetPtrObstaclesPaths(std::vector<std::vector<Node>>* paths) {
             obstacles_paths = paths;
@@ -38,13 +42,15 @@ class Search
         Map*                              map;
         EnvironmentOptions*               options;
 
-        SearchResult                     sresult;
-        std::list<std::shared_ptr<Node>> lppath, hppath;
-        std::vector<std::vector<Node>>*  obstacles_paths;
+        double                             T_max;
+        SearchResult                       sresult;
+        std::vector<Node>                  lppath, hppath;
+        std::vector<std::vector<Node>>*    obstacles_paths;
+        std::unordered_map<int, int>*      obstacles_table;
         std::unordered_map<int, std::vector<std::pair<int, int>>>* free_timesteps_table;  
 };
 
 double computeHFromCellToCell(int i1, int j1, int i2, int j2, const EnvironmentOptions &options);
-double computeCostToNeighbour(int i1, int j1, int i2, int j2, const EnvironmentOptions &options);
+double computeCostToNeighbour(int i1, int j1, int i2, int j2);
 
 #endif

@@ -16,16 +16,19 @@ public:
                             int seed, int num_obs);
     std::pair<int, int> generateStartOrEndDynObs(const Map& map);
 
-    void AddIntervalToMaxTime(const std::unordered_map<int, int>& timesteps, int max_time);
-    void timeIntervalBuilding(const Map& map);
+    void AddIntervalToMaxTime(const std::unordered_map<int, int>& timesteps,
+                              const std::unordered_map<int, int>& stop_time, int max_time);
+    void timeIntervalBuilding(double max_time, const Map& map);
 
     std::vector<std::vector<Node>>* GetPtrObstaclesPaths() { return &obstacles_paths; }
     std::unordered_map<int, std::vector<std::pair<int, int>>>* GetPtrFreeTimestepsTable() {
         return &free_timesteps_table;
     }
+    std::unordered_map<int, int>* GetPtrObsTable() { return &obstacles_table; }
 
 private:
     std::mt19937 generator;
+    std::unordered_map<int, int> obstacles_table;
     std::vector<std::vector<Node>> obstacles_paths;
     std::unordered_map<int, std::vector<std::pair<int, int>>> free_timesteps_table;
 };

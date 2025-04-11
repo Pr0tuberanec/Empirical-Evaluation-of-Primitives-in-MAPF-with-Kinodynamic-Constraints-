@@ -23,7 +23,7 @@ double computeHFromCellToCell(int i1, int j1, int i2, int j2, const EnvironmentO
     }
 }
 
-double computeCostToNeighbour(int i1, int j1, int i2, int j2, const EnvironmentOptions &options)
+double computeCostToNeighbour(int i1, int j1, int i2, int j2)
 {
     return (abs(i2 - i1) + abs(j2 - j1));
 }
@@ -46,11 +46,11 @@ void Search::updateSearchResult(Node* curNode, bool found,
 
 void Search::makePrimaryPath(Node* curNode)
 {
-    while(curNode->getParent()){
-        lppath.push_front(std::make_shared<Node>(*curNode));
-        curNode = curNode->getParent();
+    for (Node* node = curNode; node != nullptr; node = node->getParent()) {
+        lppath.emplace_back(*node);
     }
-    lppath.push_front(std::make_shared<Node>(*curNode));
+
+    std::reverse(lppath.begin(), lppath.end());
 }
 
 void Search::makeSecondaryPath()
@@ -63,8 +63,8 @@ void Search::makeSecondaryPath()
     auto prev = lppath.begin();
 
     for (auto it = std::next(prev); it != lppath.end(); ++it) {
-        int dx = (*it)->j - (*prev)->j;
-        int dy = (*it)->i - (*prev)->i;
+        int dx = it->j - prev->j;
+        int dy = it->i - prev->i;
 
         if (dx != prev_dx || dy != prev_dy) {
             hppath.push_back(*prev);

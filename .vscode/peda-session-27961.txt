@@ -1,0 +1,5 @@
+break main.cpp:32
+break mission.cpp:67
+catch throw
+
+set exec-wrapper logging enabled

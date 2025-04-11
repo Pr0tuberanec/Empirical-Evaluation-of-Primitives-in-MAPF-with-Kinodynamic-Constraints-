@@ -59,7 +59,7 @@ bool Config::getConfig(const char *FileName)
     std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 
     if (value == CNS_SP_ST_ASTAR || value == CNS_SP_ST_SIPP || value == CNS_SP_ST_PBS) {
-        N = 7;
+        N = 10;
         SearchParams = new double[N];
         SearchParams[CN_SP_ST] = CN_SP_ST_ASTAR;
         if (value == CNS_SP_ST_SIPP)
@@ -132,6 +132,34 @@ bool Config::getConfig(const char *FileName)
                 SearchParams[CN_SP_BT] = CN_SP_BT_GMAX;
             }
         }
+
+        if (!algorithm.contains(CNS_T_MAX)) {
+            std::cout << "Warning! No '" << CNS_T_MAX << "' tag found in JSON file" << std::endl;
+            std::cout << "Value of '" << CNS_T_MAX << "' was defined to 100" << std::endl;
+            SearchParams[CN_T_MAX] = 100;
+        } else {
+            element = algorithm[CNS_T_MAX];
+            SearchParams[CN_T_MAX] = static_cast<double>(element);
+        }
+
+        if (!algorithm.contains(CNS_SEED)) {
+            std::cout << "Warning! No '" << CNS_SEED << "' tag found in JSON file" << std::endl;
+            std::cout << "Value of '" << CNS_SEED << "' was defined to 0" << std::endl;
+            SearchParams[CN_SEED] = 0;
+        } else {
+            element = algorithm[CNS_SEED];
+            SearchParams[CN_SEED] = static_cast<double>(element);
+        }
+
+        if (!algorithm.contains(CNS_NUM_OBS)) {
+            std::cout << "Warning! No '" << CNS_NUM_OBS << "' tag found in JSON file" << std::endl;
+            std::cout << "Value of '" << CNS_NUM_OBS << "' was defined to 0" << std::endl;
+            SearchParams[CN_NUM_OBS] = 0;
+        } else {
+            element = algorithm[CNS_NUM_OBS];
+            SearchParams[CN_NUM_OBS] = static_cast<double>(element);
+        }
+
     } else {
         std::cout << "Error! Value of '" << CNS_TAG_ST << "' tag (algorithm name) is not correctly specified."
                   << std::endl;

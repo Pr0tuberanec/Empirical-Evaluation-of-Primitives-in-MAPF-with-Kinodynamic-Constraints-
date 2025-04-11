@@ -87,6 +87,13 @@
 
 #define CN_SP_MT 4 //MetricType
 
+#define CNS_T_MAX      "T_max"
+#define CNS_SEED       "seed"
+#define CNS_NUM_OBS    "number_of_obstacles"
+#define CN_T_MAX        7
+#define CN_SEED         8
+#define CN_NUM_OBS      9
+
 #define CNS_SP_MT_DIAG  "diagonal"
 #define CNS_SP_MT_MANH  "manhattan"
 #define CNS_SP_MT_EUCL  "euclidean"
@@ -106,7 +113,6 @@
 
 #define CN_SP_BT_GMIN 0
 #define CN_SP_BT_GMAX 1
-
 
 
 //Log Configuration

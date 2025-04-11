@@ -82,7 +82,7 @@ void JsonLogger::saveLog()
     }
 }
 
-void JsonLogger::writeToLogMap(const Map& map, const std::list<std::shared_ptr<Node>>& path)
+void JsonLogger::writeToLogMap(const Map& map, const std::vector<Node>& path)
 {
     if (loglevel == CN_LP_LEVEL_NOPE_WORD || loglevel == CN_LP_LEVEL_TINY_WORD)
         return;
@@ -95,8 +95,8 @@ void JsonLogger::writeToLogMap(const Map& map, const std::list<std::shared_ptr<N
         std::string str = "[";
         for (int j = 0; j < map.width; ++j) {
             inPath = false;
-            for(std::list<std::shared_ptr<Node>>::const_iterator it = path.begin(); it != path.end(); it++)
-                if((*it)->i == i && (*it)->j == j) {
+            for(std::vector<Node>::const_iterator it = path.begin(); it != path.end(); it++)
+                if(it->i == i && it->j == j) {
                     inPath = true;
                     break;
                 }
@@ -210,34 +210,34 @@ void JsonLogger::writeToLogOpenClose(const std::vector<std::list<Node> > &open,
     }
 }; */
 
-void JsonLogger::writeToLogPath(const std::list<std::shared_ptr<Node>>& path)
+void JsonLogger::writeToLogPath(const std::vector<Node>& path)
 {
     if (loglevel == CN_LP_LEVEL_NOPE_WORD || loglevel == CN_LP_LEVEL_TINY_WORD || path.empty())
         return;
     int iterate = 0;
     nlohmann::ordered_json lplevel;
-    for (std::list<std::shared_ptr<Node>>::const_iterator it = path.begin(); it != path.end(); it++) {
-        lplevel[iterate] = std::string(CNS_TAG_ATTR_X) + " = " + std::to_string((*it)->j) + ", " +
-                           std::string(CNS_TAG_ATTR_Y) + " = " + std::to_string((*it)->i) + ", " +
-                           std::string(CNS_TAG_ATTR_TIME) + " = " + std::to_string((*it)->g);
+    for (std::vector<Node>::const_iterator it = path.begin(); it != path.end(); it++) {
+        lplevel[iterate] = std::string(CNS_TAG_ATTR_X) + " = " + std::to_string(it->j) + ", " +
+                           std::string(CNS_TAG_ATTR_Y) + " = " + std::to_string(it->i) + ", " +
+                           std::string(CNS_TAG_ATTR_TIME) + " = " + std::to_string(it->g);
         iterate++;
     }
     objJson[CNS_TAG_ROOT][CNS_TAG_LOG][CNS_TAG_LPLEVEL] = lplevel;
 }
 
-void JsonLogger::writeToLogHPpath(const std::list<std::shared_ptr<Node>>& hppath)
+void JsonLogger::writeToLogHPpath(const std::vector<Node>& hppath)
 {
     if (loglevel == CN_LP_LEVEL_NOPE_WORD || loglevel == CN_LP_LEVEL_TINY_WORD || hppath.empty())
         return;
     int partnumber = 0;
     nlohmann::ordered_json hplevel;
-    std::list<std::shared_ptr<Node>>::const_iterator iter = hppath.begin();
-    std::list<std::shared_ptr<Node>>::const_iterator it = hppath.begin();
+    std::vector<Node>::const_iterator iter = hppath.begin();
+    std::vector<Node>::const_iterator it = hppath.begin();
 
     while (iter != --hppath.end()) {
         ++iter;
-        hplevel[partnumber] = {{CNS_TAG_ATTR_NUM, partnumber}, {CNS_TAG_ATTR_STX, (*it)->j}, {CNS_TAG_ATTR_STY, (*it)->i},
-                               {CNS_TAG_ATTR_FINX, (*iter)->j}, {CNS_TAG_ATTR_FINY, (*iter)->i}, {CNS_TAG_ATTR_LENGTH, (*iter)->g - (*it)->g}};
+        hplevel[partnumber] = {{CNS_TAG_ATTR_NUM, partnumber}, {CNS_TAG_ATTR_STX, it->j}, {CNS_TAG_ATTR_STY, it->i},
+                               {CNS_TAG_ATTR_FINX, iter->j}, {CNS_TAG_ATTR_FINY, iter->i}, {CNS_TAG_ATTR_LENGTH, iter->g - it->g}};
         ++it;
         ++partnumber;
     }

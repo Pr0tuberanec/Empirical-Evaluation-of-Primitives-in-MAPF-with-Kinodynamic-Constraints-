@@ -1,17 +1,27 @@
-cmake_minimum_required(VERSION 3.2)
-set(PROJECT_NAME "YourFirstName_YourLastName_ASearch")
-project(${PROJECT_NAME})
+cmake_minimum_required(VERSION 3.12)
+project(Asearch  # Используем ваше оригинальное имя
+        LANGUAGES CXX)
 
+# Настройки компилятора
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-if (${MINGW})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra -static -static-libgcc -static-libstdc++")
-else ()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra")
-endif()
+# Флаги для Debug/Release
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
-set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+# Автоматическое добавление всех исходников
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "Src/*.cpp")
+file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS "Src/*.h")
 
-enable_testing()
+# Главный исполняемый файл
+add_executable(${PROJECT_NAME}
+    ${SOURCES}
+    ${HEADERS}
+)
 
-add_subdirectory(Src)
-add_subdirectory(Tests)
+# Пути для заголовков
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/Src
+)

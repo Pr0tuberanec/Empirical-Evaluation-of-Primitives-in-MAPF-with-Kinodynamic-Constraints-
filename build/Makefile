@@ -65,16 +65,6 @@ CMAKE_BINARY_DIR = /home/user/path-planning-project-master/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-.PHONY : test/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -94,51 +84,6 @@ rebuild_cache:
 # Special rule for the target rebuild_cache
 rebuild_cache/fast: rebuild_cache
 .PHONY : rebuild_cache/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-.PHONY : list_install_components/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
-
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -168,47 +113,310 @@ preinstall/fast:
 
 # clear depends
 depend:
+	$(CMAKE_COMMAND) -P /home/user/path-planning-project-master/build/CMakeFiles/VerifyGlobs.cmake
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named YourFirstName_YourLastName_ASearch
+# Target rules for targets named Asearch
 
 # Build rule for target.
-YourFirstName_YourLastName_ASearch: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 YourFirstName_YourLastName_ASearch
-.PHONY : YourFirstName_YourLastName_ASearch
+Asearch: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Asearch
+.PHONY : Asearch
 
 # fast build rule for target.
-YourFirstName_YourLastName_ASearch/fast:
-	$(MAKE) $(MAKESILENT) -f Src/CMakeFiles/YourFirstName_YourLastName_ASearch.dir/build.make Src/CMakeFiles/YourFirstName_YourLastName_ASearch.dir/build
-.PHONY : YourFirstName_YourLastName_ASearch/fast
+Asearch/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/build
+.PHONY : Asearch/fast
 
-#=============================================================================
-# Target rules for targets named PPLIB
+Src/astar.o: Src/astar.cpp.o
+.PHONY : Src/astar.o
 
-# Build rule for target.
-PPLIB: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 PPLIB
-.PHONY : PPLIB
+# target to build an object file
+Src/astar.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/astar.cpp.o
+.PHONY : Src/astar.cpp.o
 
-# fast build rule for target.
-PPLIB/fast:
-	$(MAKE) $(MAKESILENT) -f Src/CMakeFiles/PPLIB.dir/build.make Src/CMakeFiles/PPLIB.dir/build
-.PHONY : PPLIB/fast
+Src/astar.i: Src/astar.cpp.i
+.PHONY : Src/astar.i
 
-#=============================================================================
-# Target rules for targets named testbench
+# target to preprocess a source file
+Src/astar.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/astar.cpp.i
+.PHONY : Src/astar.cpp.i
 
-# Build rule for target.
-testbench: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 testbench
-.PHONY : testbench
+Src/astar.s: Src/astar.cpp.s
+.PHONY : Src/astar.s
 
-# fast build rule for target.
-testbench/fast:
-	$(MAKE) $(MAKESILENT) -f Tests/CMakeFiles/testbench.dir/build.make Tests/CMakeFiles/testbench.dir/build
-.PHONY : testbench/fast
+# target to generate assembly for a file
+Src/astar.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/astar.cpp.s
+.PHONY : Src/astar.cpp.s
+
+Src/config.o: Src/config.cpp.o
+.PHONY : Src/config.o
+
+# target to build an object file
+Src/config.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/config.cpp.o
+.PHONY : Src/config.cpp.o
+
+Src/config.i: Src/config.cpp.i
+.PHONY : Src/config.i
+
+# target to preprocess a source file
+Src/config.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/config.cpp.i
+.PHONY : Src/config.cpp.i
+
+Src/config.s: Src/config.cpp.s
+.PHONY : Src/config.s
+
+# target to generate assembly for a file
+Src/config.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/config.cpp.s
+.PHONY : Src/config.cpp.s
+
+Src/dynobs.o: Src/dynobs.cpp.o
+.PHONY : Src/dynobs.o
+
+# target to build an object file
+Src/dynobs.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/dynobs.cpp.o
+.PHONY : Src/dynobs.cpp.o
+
+Src/dynobs.i: Src/dynobs.cpp.i
+.PHONY : Src/dynobs.i
+
+# target to preprocess a source file
+Src/dynobs.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/dynobs.cpp.i
+.PHONY : Src/dynobs.cpp.i
+
+Src/dynobs.s: Src/dynobs.cpp.s
+.PHONY : Src/dynobs.s
+
+# target to generate assembly for a file
+Src/dynobs.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/dynobs.cpp.s
+.PHONY : Src/dynobs.cpp.s
+
+Src/environmentoptions.o: Src/environmentoptions.cpp.o
+.PHONY : Src/environmentoptions.o
+
+# target to build an object file
+Src/environmentoptions.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/environmentoptions.cpp.o
+.PHONY : Src/environmentoptions.cpp.o
+
+Src/environmentoptions.i: Src/environmentoptions.cpp.i
+.PHONY : Src/environmentoptions.i
+
+# target to preprocess a source file
+Src/environmentoptions.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/environmentoptions.cpp.i
+.PHONY : Src/environmentoptions.cpp.i
+
+Src/environmentoptions.s: Src/environmentoptions.cpp.s
+.PHONY : Src/environmentoptions.s
+
+# target to generate assembly for a file
+Src/environmentoptions.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/environmentoptions.cpp.s
+.PHONY : Src/environmentoptions.cpp.s
+
+Src/heap.o: Src/heap.cpp.o
+.PHONY : Src/heap.o
+
+# target to build an object file
+Src/heap.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/heap.cpp.o
+.PHONY : Src/heap.cpp.o
+
+Src/heap.i: Src/heap.cpp.i
+.PHONY : Src/heap.i
+
+# target to preprocess a source file
+Src/heap.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/heap.cpp.i
+.PHONY : Src/heap.cpp.i
+
+Src/heap.s: Src/heap.cpp.s
+.PHONY : Src/heap.s
+
+# target to generate assembly for a file
+Src/heap.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/heap.cpp.s
+.PHONY : Src/heap.cpp.s
+
+Src/main.o: Src/main.cpp.o
+.PHONY : Src/main.o
+
+# target to build an object file
+Src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/main.cpp.o
+.PHONY : Src/main.cpp.o
+
+Src/main.i: Src/main.cpp.i
+.PHONY : Src/main.i
+
+# target to preprocess a source file
+Src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/main.cpp.i
+.PHONY : Src/main.cpp.i
+
+Src/main.s: Src/main.cpp.s
+.PHONY : Src/main.s
+
+# target to generate assembly for a file
+Src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/main.cpp.s
+.PHONY : Src/main.cpp.s
+
+Src/map.o: Src/map.cpp.o
+.PHONY : Src/map.o
+
+# target to build an object file
+Src/map.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/map.cpp.o
+.PHONY : Src/map.cpp.o
+
+Src/map.i: Src/map.cpp.i
+.PHONY : Src/map.i
+
+# target to preprocess a source file
+Src/map.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/map.cpp.i
+.PHONY : Src/map.cpp.i
+
+Src/map.s: Src/map.cpp.s
+.PHONY : Src/map.s
+
+# target to generate assembly for a file
+Src/map.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/map.cpp.s
+.PHONY : Src/map.cpp.s
+
+Src/mission.o: Src/mission.cpp.o
+.PHONY : Src/mission.o
+
+# target to build an object file
+Src/mission.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/mission.cpp.o
+.PHONY : Src/mission.cpp.o
+
+Src/mission.i: Src/mission.cpp.i
+.PHONY : Src/mission.i
+
+# target to preprocess a source file
+Src/mission.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/mission.cpp.i
+.PHONY : Src/mission.cpp.i
+
+Src/mission.s: Src/mission.cpp.s
+.PHONY : Src/mission.s
+
+# target to generate assembly for a file
+Src/mission.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/mission.cpp.s
+.PHONY : Src/mission.cpp.s
+
+Src/search.o: Src/search.cpp.o
+.PHONY : Src/search.o
+
+# target to build an object file
+Src/search.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/search.cpp.o
+.PHONY : Src/search.cpp.o
+
+Src/search.i: Src/search.cpp.i
+.PHONY : Src/search.i
+
+# target to preprocess a source file
+Src/search.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/search.cpp.i
+.PHONY : Src/search.cpp.i
+
+Src/search.s: Src/search.cpp.s
+.PHONY : Src/search.s
+
+# target to generate assembly for a file
+Src/search.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/search.cpp.s
+.PHONY : Src/search.cpp.s
+
+Src/sipp.o: Src/sipp.cpp.o
+.PHONY : Src/sipp.o
+
+# target to build an object file
+Src/sipp.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/sipp.cpp.o
+.PHONY : Src/sipp.cpp.o
+
+Src/sipp.i: Src/sipp.cpp.i
+.PHONY : Src/sipp.i
+
+# target to preprocess a source file
+Src/sipp.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/sipp.cpp.i
+.PHONY : Src/sipp.cpp.i
+
+Src/sipp.s: Src/sipp.cpp.s
+.PHONY : Src/sipp.s
+
+# target to generate assembly for a file
+Src/sipp.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/sipp.cpp.s
+.PHONY : Src/sipp.cpp.s
+
+Src/tinyxml2.o: Src/tinyxml2.cpp.o
+.PHONY : Src/tinyxml2.o
+
+# target to build an object file
+Src/tinyxml2.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/tinyxml2.cpp.o
+.PHONY : Src/tinyxml2.cpp.o
+
+Src/tinyxml2.i: Src/tinyxml2.cpp.i
+.PHONY : Src/tinyxml2.i
+
+# target to preprocess a source file
+Src/tinyxml2.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/tinyxml2.cpp.i
+.PHONY : Src/tinyxml2.cpp.i
+
+Src/tinyxml2.s: Src/tinyxml2.cpp.s
+.PHONY : Src/tinyxml2.s
+
+# target to generate assembly for a file
+Src/tinyxml2.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/tinyxml2.cpp.s
+.PHONY : Src/tinyxml2.cpp.s
+
+Src/xmllogger.o: Src/xmllogger.cpp.o
+.PHONY : Src/xmllogger.o
+
+# target to build an object file
+Src/xmllogger.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/xmllogger.cpp.o
+.PHONY : Src/xmllogger.cpp.o
+
+Src/xmllogger.i: Src/xmllogger.cpp.i
+.PHONY : Src/xmllogger.i
+
+# target to preprocess a source file
+Src/xmllogger.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/xmllogger.cpp.i
+.PHONY : Src/xmllogger.cpp.i
+
+Src/xmllogger.s: Src/xmllogger.cpp.s
+.PHONY : Src/xmllogger.s
+
+# target to generate assembly for a file
+Src/xmllogger.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/xmllogger.cpp.s
+.PHONY : Src/xmllogger.cpp.s
 
 # Help Target
 help:
@@ -217,15 +425,44 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
-	@echo "... install"
-	@echo "... install/local"
-	@echo "... install/strip"
-	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... test"
-	@echo "... PPLIB"
-	@echo "... YourFirstName_YourLastName_ASearch"
-	@echo "... testbench"
+	@echo "... Asearch"
+	@echo "... Src/astar.o"
+	@echo "... Src/astar.i"
+	@echo "... Src/astar.s"
+	@echo "... Src/config.o"
+	@echo "... Src/config.i"
+	@echo "... Src/config.s"
+	@echo "... Src/dynobs.o"
+	@echo "... Src/dynobs.i"
+	@echo "... Src/dynobs.s"
+	@echo "... Src/environmentoptions.o"
+	@echo "... Src/environmentoptions.i"
+	@echo "... Src/environmentoptions.s"
+	@echo "... Src/heap.o"
+	@echo "... Src/heap.i"
+	@echo "... Src/heap.s"
+	@echo "... Src/main.o"
+	@echo "... Src/main.i"
+	@echo "... Src/main.s"
+	@echo "... Src/map.o"
+	@echo "... Src/map.i"
+	@echo "... Src/map.s"
+	@echo "... Src/mission.o"
+	@echo "... Src/mission.i"
+	@echo "... Src/mission.s"
+	@echo "... Src/search.o"
+	@echo "... Src/search.i"
+	@echo "... Src/search.s"
+	@echo "... Src/sipp.o"
+	@echo "... Src/sipp.i"
+	@echo "... Src/sipp.s"
+	@echo "... Src/tinyxml2.o"
+	@echo "... Src/tinyxml2.i"
+	@echo "... Src/tinyxml2.s"
+	@echo "... Src/xmllogger.o"
+	@echo "... Src/xmllogger.i"
+	@echo "... Src/xmllogger.s"
 .PHONY : help
 
 
@@ -237,6 +474,7 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
+	$(CMAKE_COMMAND) -P /home/user/path-planning-project-master/build/CMakeFiles/VerifyGlobs.cmake
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

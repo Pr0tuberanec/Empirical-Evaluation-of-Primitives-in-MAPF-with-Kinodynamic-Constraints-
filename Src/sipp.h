@@ -19,21 +19,18 @@ class SIPP : public Search
     private:
         TimeNode getMin();
 
-        //
         std::vector<std::pair<int, int>> getFreeTimesteps(int nodeIdx);
-        // std::vector<std::pair<int, int>> timeIntervalsBuilding();
 
         void initializeSearch();
         
+        bool isGoalReachable(const TimeNode& curNode);
         void processNode(const TimeNode& curNode);                              
 
         bool isNodeInOpen(int nodeIdx, int start_t);
         bool isValidSuccessor(int nodeIdx, int start_t);
 
-        //
         int findEarliestAvailableTime(TimeNode& curNode, Node& tmp, int l_bnd_t, int r_bnd_t);
         bool checkIntersection(TimeNode curNode, Node newNode, int cur_time);
-        //
 
         void getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors);
         void updateSearchResult(Node* curNode, bool found,

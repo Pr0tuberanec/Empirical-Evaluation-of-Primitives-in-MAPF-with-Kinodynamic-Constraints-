@@ -1,31 +1,30 @@
 {
+    "version": "2.0.0",
     "configurations": [
         {
-            "name": "C/C++: g++-12 build and debug active file",
+            "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": [],
-            "stopAtEntry": false,
+            "program": "/home/user/path-planning-project-master/build/Asearch",
+            "args": ["/home/user/pro/path-planning-project-master/Examples/map.json"],
+            "stopAtEntry": true,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
+            "preLaunchTask": "build",
             "setupCommands": [
                 {
-                    "description": "Enable pretty-printing for gdb",
+                    "description": "Enable pretty-printing",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
+                  },
+                  {
+                    "description": "Load libstdc++ printers",
+                    "text": "source /usr/share/gcc/python/libstdcxx/v6/printers.py",
                     "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "C/C++: g++-12 build active file",
-            "miDebuggerPath": "/usr/bin/gdb"
+                  }
+            ]
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

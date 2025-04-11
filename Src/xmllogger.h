@@ -19,10 +19,10 @@
         //void writeToLogOpenClose(const std::vector<std::list<Node> > &open,
         //                         const std::unordered_map<int, Node> &close,
         //                         bool last);
-        void writeToLogMap(const Map& map, const std::list<std::shared_ptr<Node>>& path) override;
+        void writeToLogMap(const Map& map, const std::vector<Node>& path) override;
         void writeToLogObstaclesPath(const std::vector<std::vector<Node>>* obstacles_paths) override;
-        void writeToLogPath(const std::list<std::shared_ptr<Node>>& path) override;
-        void writeToLogHPpath(const std::list<std::shared_ptr<Node>>& hppath) override;
+        void writeToLogPath(const std::vector<Node>& path) override;
+        void writeToLogHPpath(const std::vector<Node>& hppath) override;
         void writeToLogNotFound() override;
 
         void writeToLogSummary(unsigned int numberOfSteps, unsigned int nodesCreated,
