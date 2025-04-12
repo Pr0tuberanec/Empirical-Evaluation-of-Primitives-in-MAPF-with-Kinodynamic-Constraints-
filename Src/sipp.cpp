@@ -114,17 +114,14 @@ TimeNode SIPP::getMin()
     return min;
 }
 
-// Нужно перейти на рёберную проверку пересечений
-bool SIPP::checkIntersection(TimeNode curNode, Node newNode, int cur_time) {
-    if (!obstacles_paths->empty()) {
-        for (size_t obs_idx = 0; obs_idx < obstacles_paths->size(); ++obs_idx) {
-            const auto& obs_path = (*obstacles_paths)[obs_idx];
-
-            if (cur_time + 1 < obs_path.size()) {
-                if ((obs_path[cur_time + 1].i == curNode.i && obs_path[cur_time + 1].j == curNode.j) &&
-                    (obs_path[cur_time].i == newNode.i && obs_path[cur_time].j == newNode.j)) {
-                    return true;
-                }
+// Плохо продумана поддержка передвижений различной стоимости
+bool SIPP::checkMoveIntersection(TimeNode curNode, Node newNode, int start_t, int end_t) {
+    for(int time = start_t; time < end_t; ++time) {
+        int curNodeIdx = time * map->width * map->height + newNode.i * map->width + newNode.j;
+        int newNodeIdx = (time + 1) * map->width * map->height + curNode.i * map->width + curNode.j;
+        if (obstacles_table->count(curNodeIdx) && obstacles_table->count(newNodeIdx)) {
+            if ((*obstacles_table)[curNodeIdx] == (*obstacles_table)[newNodeIdx]) {
+                return true;
             }
         }
     }
@@ -140,14 +137,6 @@ std::vector<std::pair<int, int>> SIPP::getFreeTimesteps(int nodeIdx) {
 
 bool SIPP::isValidSuccessor(int nodeIdx, int start_t) {
     return close.find(nodeIdx) == close.end() || close[nodeIdx].find(start_t) == close[nodeIdx].end();
-}
-
-int SIPP::findEarliestAvailableTime(TimeNode& curNode, Node& tmp, int l_bnd_t, int r_bnd_t) {
-    int time = l_bnd_t - 1;
-    while ((time < r_bnd_t) && checkIntersection(curNode, tmp, time)) {
-        ++time;
-    }
-    return (time == r_bnd_t) ? -1 : ++time;
 }
 
 void SIPP::getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors) {
@@ -168,22 +157,21 @@ void SIPP::getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors) {
                 continue;
             }
 
-            double dist = computeCostToNeighbour(curNode.i, curNode.j, neighbour.i, neighbour.j);
+            int dist = computeCostToNeighbour(curNode.i, curNode.j, neighbour.i, neighbour.j);
             if (start_t > curNode.end_t + dist || end_t < curNode.t + dist) {
                 continue;
             }
+            
+            int l_bnd_t = std::max(curNode.t + dist, start_t);
+            int r_bnd_t = std::min(end_t, curNode.end_t + dist);
 
-            int l_bnd_t = (start_t <= curNode.t + dist) ? curNode.t + dist : start_t;
-            int r_bnd_t = (end_t <= curNode.t + dist) ? end_t : curNode.end_t + dist;
-
-            int earliest_time = findEarliestAvailableTime(curNode, neighbour, l_bnd_t, r_bnd_t);
-            if (earliest_time == -1) {
+            if (checkMoveIntersection(curNode, neighbour, curNode.end_t, l_bnd_t)) {
                 continue;
             }
 
             TimeNode newNode(neighbour.i, neighbour.j, curNode.g + dist,
                              computeHFromCellToCell(neighbour.i, neighbour.j, map->goal_i, map->goal_j, *options), 
-                             hweight, start_t, end_t, earliest_time, nullptr);
+                             hweight, start_t, end_t, l_bnd_t, nullptr);
             successors.emplace_back(newNode);
         }
     }

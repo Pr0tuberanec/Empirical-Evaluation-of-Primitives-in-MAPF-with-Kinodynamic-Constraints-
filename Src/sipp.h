@@ -29,8 +29,7 @@ class SIPP : public Search
         bool isNodeInOpen(int nodeIdx, int start_t);
         bool isValidSuccessor(int nodeIdx, int start_t);
 
-        int findEarliestAvailableTime(TimeNode& curNode, Node& tmp, int l_bnd_t, int r_bnd_t);
-        bool checkIntersection(TimeNode curNode, Node newNode, int cur_time);
+        bool checkMoveIntersection(TimeNode curNode, Node newNode, int start_t, int end_t);
 
         void getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors);
         void updateSearchResult(Node* curNode, bool found,
