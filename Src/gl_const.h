@@ -11,6 +11,7 @@
 #define CNS_TAG_CELLSIZE    "cellsize"
 #define CNS_TAG_WIDTH       "width"
 #define CNS_TAG_HEIGHT      "height"
+#define CNS_TAG_AGENTS      "agents"
 #define CNS_TAG_START       "start"
 #define CNS_TAG_STX         "startx"
 #define CNS_TAG_STY         "starty"

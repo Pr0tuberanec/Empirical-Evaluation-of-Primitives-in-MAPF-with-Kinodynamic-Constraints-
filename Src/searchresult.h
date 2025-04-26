@@ -4,6 +4,7 @@
 #include "node.h"
 
 #include <list>
+#include <vector>
 #include <memory>
 
 //That's the output structure for the search algorithms.
@@ -28,10 +29,10 @@ struct SearchResult
 {
         bool pathfound;
         float pathlength; //if path not found, then pathlength=0
-        const std::vector<Node>* lppath; //path as the sequence of adjacent nodes (see above)
+        std::vector<Node>* lppath; //path as the sequence of adjacent nodes (see above)
                                        //This is a pointer to the list of nodes that is actually created and hadled by Search class,
                                        //so no need to re-create them, delete them etc. It's just a trick to save some memory
-        const std::vector<Node>* hppath; //path as the sequence of non-adjacent nodes: "sections" (see above)
+        std::vector<Node>* hppath; //path as the sequence of non-adjacent nodes: "sections" (see above)
                                         //This is a pointer to the list of nodes that is actually created and hadled by Search class,
                                         //so no need to re-create them, delete them etc. It's just a trick to save some memory
         unsigned int nodescreated; //|OPEN| + |CLOSE| = total number of nodes saved in memory during search process.

@@ -130,6 +130,30 @@ Asearch/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/build
 .PHONY : Asearch/fast
 
+Src/agent.o: Src/agent.cpp.o
+.PHONY : Src/agent.o
+
+# target to build an object file
+Src/agent.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/agent.cpp.o
+.PHONY : Src/agent.cpp.o
+
+Src/agent.i: Src/agent.cpp.i
+.PHONY : Src/agent.i
+
+# target to preprocess a source file
+Src/agent.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/agent.cpp.i
+.PHONY : Src/agent.cpp.i
+
+Src/agent.s: Src/agent.cpp.s
+.PHONY : Src/agent.s
+
+# target to generate assembly for a file
+Src/agent.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/agent.cpp.s
+.PHONY : Src/agent.cpp.s
+
 Src/astar.o: Src/astar.cpp.o
 .PHONY : Src/astar.o
 
@@ -322,6 +346,30 @@ Src/mission.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/mission.cpp.s
 .PHONY : Src/mission.cpp.s
 
+Src/pbs.o: Src/pbs.cpp.o
+.PHONY : Src/pbs.o
+
+# target to build an object file
+Src/pbs.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/pbs.cpp.o
+.PHONY : Src/pbs.cpp.o
+
+Src/pbs.i: Src/pbs.cpp.i
+.PHONY : Src/pbs.i
+
+# target to preprocess a source file
+Src/pbs.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/pbs.cpp.i
+.PHONY : Src/pbs.cpp.i
+
+Src/pbs.s: Src/pbs.cpp.s
+.PHONY : Src/pbs.s
+
+# target to generate assembly for a file
+Src/pbs.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Asearch.dir/build.make CMakeFiles/Asearch.dir/Src/pbs.cpp.s
+.PHONY : Src/pbs.cpp.s
+
 Src/search.o: Src/search.cpp.o
 .PHONY : Src/search.o
 
@@ -427,6 +475,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Asearch"
+	@echo "... Src/agent.o"
+	@echo "... Src/agent.i"
+	@echo "... Src/agent.s"
 	@echo "... Src/astar.o"
 	@echo "... Src/astar.i"
 	@echo "... Src/astar.s"
@@ -451,6 +502,9 @@ help:
 	@echo "... Src/mission.o"
 	@echo "... Src/mission.i"
 	@echo "... Src/mission.s"
+	@echo "... Src/pbs.o"
+	@echo "... Src/pbs.i"
+	@echo "... Src/pbs.s"
 	@echo "... Src/search.o"
 	@echo "... Src/search.i"
 	@echo "... Src/search.s"

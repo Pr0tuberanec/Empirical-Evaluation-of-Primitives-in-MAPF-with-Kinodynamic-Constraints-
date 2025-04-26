@@ -14,6 +14,8 @@ SIPP::SIPP(double w, int BT)
     breakingties = BT;
 }
 
+SIPP::SIPP() {}
+
 SIPP::~SIPP() {}
 
 bool SIPP::stopCriterion() {
@@ -114,6 +116,17 @@ TimeNode SIPP::getMin()
     return min;
 }
 
+std::vector<std::pair<int, int>> SIPP::getFreeTimesteps(int nodeIdx) {
+    if (free_timesteps_table->find(nodeIdx) == free_timesteps_table->end()) {
+        return {{0, T_max - 1}};
+    }
+    return (*free_timesteps_table)[nodeIdx];
+}
+
+bool SIPP::isValidSuccessor(int nodeIdx, int start_t) {
+    return close.find(nodeIdx) == close.end() || close[nodeIdx].find(start_t) == close[nodeIdx].end();
+}
+
 // Плохо продумана поддержка передвижений различной стоимости
 bool SIPP::checkMoveIntersection(TimeNode curNode, Node newNode, int start_t, int end_t) {
     for(int time = start_t; time < end_t; ++time) {
@@ -126,17 +139,6 @@ bool SIPP::checkMoveIntersection(TimeNode curNode, Node newNode, int start_t, in
         }
     }
     return false;
-}
-
-std::vector<std::pair<int, int>> SIPP::getFreeTimesteps(int nodeIdx) {
-    if (free_timesteps_table->find(nodeIdx) == free_timesteps_table->end()) {
-        return {{0, T_max - 1}};
-    }
-    return (*free_timesteps_table)[nodeIdx];
-}
-
-bool SIPP::isValidSuccessor(int nodeIdx, int start_t) {
-    return close.find(nodeIdx) == close.end() || close[nodeIdx].find(start_t) == close[nodeIdx].end();
 }
 
 void SIPP::getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors) {
@@ -162,16 +164,14 @@ void SIPP::getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors) {
                 continue;
             }
             
-            int l_bnd_t = std::max(curNode.t + dist, start_t);
-            int r_bnd_t = std::min(end_t, curNode.end_t + dist);
-
-            if (checkMoveIntersection(curNode, neighbour, curNode.end_t, l_bnd_t)) {
+            if (checkMoveIntersection(curNode, neighbour, curNode.end_t, start_t)) {
                 continue;
             }
 
-            TimeNode newNode(neighbour.i, neighbour.j, curNode.g + dist,
+            int arrival_time = std::max(curNode.t + dist, start_t);
+            TimeNode newNode(neighbour.i, neighbour.j, arrival_time,
                              computeHFromCellToCell(neighbour.i, neighbour.j, map->goal_i, map->goal_j, *options), 
-                             hweight, start_t, end_t, l_bnd_t, nullptr);
+                             hweight, start_t, end_t, arrival_time, nullptr);
             successors.emplace_back(newNode);
         }
     }

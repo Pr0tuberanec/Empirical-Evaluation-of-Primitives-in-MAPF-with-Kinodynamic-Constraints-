@@ -272,7 +272,7 @@ void JsonLogger::writeToLogObstaclesPath(const std::vector<std::vector<Node>>* o
         for (size_t j = 0; j < (*obstacles_paths)[i].size(); ++j) {
             cur[iterate] = std::string(CNS_TAG_ATTR_X) + " = " + std::to_string((*obstacles_paths)[i][j].j) + ", " +
                            std::string(CNS_TAG_ATTR_Y) + " = " + std::to_string((*obstacles_paths)[i][j].i) + ", " +
-                           std::string(CNS_TAG_ATTR_TIME) + " = " + std::to_string(iterate);
+                           std::string(CNS_TAG_ATTR_TIME) + " = " + std::to_string((*obstacles_paths)[i][j].g);
             iterate++;
         }
         obsPath[str] = cur;

@@ -1,6 +1,11 @@
 [
 {
   "directory": "/home/user/path-planning-project-master/build",
+  "command": "/usr/bin/g++-12  -I/home/user/path-planning-project-master/Src -g -g -O0 -Wall -Wextra -std=c++20 -o CMakeFiles/Asearch.dir/Src/agent.cpp.o -c /home/user/path-planning-project-master/Src/agent.cpp",
+  "file": "/home/user/path-planning-project-master/Src/agent.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build",
   "command": "/usr/bin/g++-12  -I/home/user/path-planning-project-master/Src -g -g -O0 -Wall -Wextra -std=c++20 -o CMakeFiles/Asearch.dir/Src/astar.cpp.o -c /home/user/path-planning-project-master/Src/astar.cpp",
   "file": "/home/user/path-planning-project-master/Src/astar.cpp"
 },
@@ -38,6 +43,11 @@
   "directory": "/home/user/path-planning-project-master/build",
   "command": "/usr/bin/g++-12  -I/home/user/path-planning-project-master/Src -g -g -O0 -Wall -Wextra -std=c++20 -o CMakeFiles/Asearch.dir/Src/mission.cpp.o -c /home/user/path-planning-project-master/Src/mission.cpp",
   "file": "/home/user/path-planning-project-master/Src/mission.cpp"
+},
+{
+  "directory": "/home/user/path-planning-project-master/build",
+  "command": "/usr/bin/g++-12  -I/home/user/path-planning-project-master/Src -g -g -O0 -Wall -Wextra -std=c++20 -o CMakeFiles/Asearch.dir/Src/pbs.cpp.o -c /home/user/path-planning-project-master/Src/pbs.cpp",
+  "file": "/home/user/path-planning-project-master/Src/pbs.cpp"
 },
 {
   "directory": "/home/user/path-planning-project-master/build",

@@ -270,12 +270,13 @@ CMakeFiles/Asearch.dir/Src/xmllogger.cpp.o: \
  /usr/include/c++/12/pstl/glue_numeric_defs.h /usr/include/c++/12/any \
  /home/user/path-planning-project-master/Src/ilogger.h \
  /home/user/path-planning-project-master/Src/map.h \
+ /home/user/path-planning-project-master/Src/agent.h \
  /usr/include/c++/12/iostream \
  /home/user/path-planning-project-master/Src/gl_const.h \
- /home/user/path-planning-project-master/Src/tinyxml2.h \
  /home/user/path-planning-project-master/Src/node.h \
  /usr/include/c++/12/list /usr/include/c++/12/bits/stl_list.h \
- /usr/include/c++/12/bits/list.tcc /usr/include/c++/12/fstream \
+ /usr/include/c++/12/bits/list.tcc /usr/include/c++/12/unordered_set \
+ /usr/include/c++/12/bits/unordered_set.h /usr/include/c++/12/fstream \
  /usr/include/x86_64-linux-gnu/c++/12/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++io.h \
  /usr/include/c++/12/bits/fstream.tcc

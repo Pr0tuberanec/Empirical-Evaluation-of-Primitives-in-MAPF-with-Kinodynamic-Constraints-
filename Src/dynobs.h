@@ -25,6 +25,9 @@ public:
         return &free_timesteps_table;
     }
     std::unordered_map<int, int>* GetPtrObsTable() { return &obstacles_table; }
+    void SetObstaclesPaths(std::vector<std::vector<Node>>& paths) {
+        obstacles_paths = paths;
+    }
 
 private:
     std::mt19937 generator;

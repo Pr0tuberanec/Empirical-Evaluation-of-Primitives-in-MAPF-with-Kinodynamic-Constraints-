@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "Asearch"
   "Asearch.pdb"
+  "CMakeFiles/Asearch.dir/Src/agent.cpp.o"
+  "CMakeFiles/Asearch.dir/Src/agent.cpp.o.d"
   "CMakeFiles/Asearch.dir/Src/astar.cpp.o"
   "CMakeFiles/Asearch.dir/Src/astar.cpp.o.d"
   "CMakeFiles/Asearch.dir/Src/config.cpp.o"
@@ -17,6 +19,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Asearch.dir/Src/map.cpp.o.d"
   "CMakeFiles/Asearch.dir/Src/mission.cpp.o"
   "CMakeFiles/Asearch.dir/Src/mission.cpp.o.d"
+  "CMakeFiles/Asearch.dir/Src/pbs.cpp.o"
+  "CMakeFiles/Asearch.dir/Src/pbs.cpp.o.d"
   "CMakeFiles/Asearch.dir/Src/search.cpp.o"
   "CMakeFiles/Asearch.dir/Src/search.cpp.o.d"
   "CMakeFiles/Asearch.dir/Src/sipp.cpp.o"

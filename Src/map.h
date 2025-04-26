@@ -1,5 +1,6 @@
 #ifndef MAP_H
 #define	MAP_H
+#include "agent.h"
 #include <iostream>
 #include "gl_const.h"
 #include <sstream>
@@ -7,7 +8,7 @@
 #include <string>
 #include <memory>
 #include <algorithm>
-#include "tinyxml2.h"
+#include "json.hpp"
 
 //That's the class that stores BOTH grid map data AND start-goal locations.
 //getValue reads the input XML and fills the Map object.
@@ -25,11 +26,11 @@ class Map
         int                                         start_i, start_j;
         int                                         goal_i, goal_j;
         double                                      cellSize;
+        std::shared_ptr<std::vector<Agent>>         agents_tasks;
         std::shared_ptr<std::shared_ptr<int[]>[]>   Grid;
 
     public:
         Map();
-        //Map(const Map& orig);
         ~Map();
 
         Map(const Map& orig)
@@ -37,6 +38,7 @@ class Map
             start_i(orig.start_i), start_j(orig.start_j),
             goal_i(orig.goal_i), goal_j(orig.goal_j),
             cellSize(orig.cellSize),
+            agents_tasks(orig.agents_tasks),
             Grid(orig.Grid) // Копируем shared_ptr, разделяя владение
         {}
 
@@ -45,7 +47,6 @@ class Map
         bool CellOnGrid (int i, int j) const;
         bool CellIsObstacle(int i, int j) const;
         int  getValue(int i, int j) const;
-
 };
 
 #endif

@@ -6,7 +6,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/user/path-planning-project-master/build/Asearch",
-            "args": ["/home/user/pro/path-planning-project-master/Examples/map.json"],
+            "args": ["/home/user/pro/path-planning-project-master/Examples/Example.json"],
             "stopAtEntry": true,
             "cwd": "${fileDirname}",
             "environment": [],

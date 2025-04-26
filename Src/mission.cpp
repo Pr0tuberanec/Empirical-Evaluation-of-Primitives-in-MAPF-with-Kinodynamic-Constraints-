@@ -56,6 +56,8 @@ void Mission::createSearch()
         search = new Astar(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT]);
     if (config.SearchParams[CN_SP_ST] == CN_SP_ST_SIPP)
         search = new SIPP(config.SearchParams[CN_SP_HW], config.SearchParams[CN_SP_BT]);
+    if (config.SearchParams[CN_SP_ST] == CN_SP_ST_PBS)
+        search = new PBS;
 }
 
 void Mission::startSearch()

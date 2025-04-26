@@ -14,6 +14,7 @@ Map::Map()
     start_j = -1;
     goal_i = -1;
     goal_j = -1;
+    agents_tasks = nullptr;
     Grid = nullptr;
     cellSize = 1;
 }
@@ -41,7 +42,7 @@ bool Map::getMap(const char *FileName)
 
     std::stringstream stream;
 
-    bool hasGridMem = false, hasGrid = false, hasHeight = false, hasWidth = false, hasSTX = false, hasSTY = false, hasFINX = false, hasFINY = false, hasCellSize = false;
+    bool hasGridMem = false, hasGrid = false, hasHeight = false, hasWidth = false, hasCellSize = false;
 
     std::string value;
     std::ifstream file(FileName);
@@ -146,102 +147,37 @@ bool Map::getMap(const char *FileName)
                 else
                     hasCellSize = true;
             }
-        }
-        else if (value == CNS_TAG_STX) {
-            if (!hasWidth) {
-                std::cout << "Error! '" << CNS_TAG_STX << "' tag encountered before '" << CNS_TAG_WIDTH << "' tag."
-                          << std::endl;
-                return false;
-            }
-
-            if (hasSTX) {
-                std::cout << "Warning! Duplicate '" << CNS_TAG_STX << "' encountered." << std::endl;
-                std::cout << "Only first value of '" << CNS_TAG_STX << "' =" << start_j << "will be used." << std::endl;
-            }
-            else {
-                if (!(stream >> start_j && start_j >= 0 && start_j < width)) {
-                    std::cout << "Warning! Invalid value of '" << CNS_TAG_STX
-                              << "' tag encountered (or could not convert to integer)" << std::endl;
-                    std::cout << "Value of '" << CNS_TAG_STX << "' tag should be an integer AND >=0 AND < '"
-                              << CNS_TAG_WIDTH << "' value, which is " << width << std::endl;
-                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_STX
-                              << "' tag will be encountered later..." << std::endl;
+        } else if (value == CNS_TAG_AGENTS) {
+            agents_tasks = std::make_shared<std::vector<Agent>>();
+            nlohmann::ordered_json agents = map[CNS_TAG_AGENTS];
+            for (auto it = agents.begin(); it != agents.end(); ++it) {
+                const std::string& agent_id = it.key();
+                const auto& agent_data = it.value();
+        
+                if (!agent_data.contains(CNS_TAG_STX) || !agent_data.contains(CNS_TAG_STY) ||
+                    !agent_data.contains(CNS_TAG_FINX) || !agent_data.contains(CNS_TAG_FINY)) {
+                    std::cout << "Error! Agent '" << agent_id << "' is missing one or more required fields." << std::endl;
+                    return false;
                 }
-                else
-                    hasSTX = true;
-            }
-        }
-        else if (value == CNS_TAG_STY) {
-            if (!hasHeight) {
-                std::cout << "Error! '" << CNS_TAG_STY << "' tag encountered before '" << CNS_TAG_HEIGHT << "' tag."
-                          << std::endl;
-                return false;
-            }
-
-            if (hasSTY) {
-                std::cout << "Warning! Duplicate '" << CNS_TAG_STY << "' encountered." << std::endl;
-                std::cout << "Only first value of '" << CNS_TAG_STY << "' =" << start_i << "will be used." << std::endl;
-            }
-            else {
-                if (!(stream >> start_i && start_i >= 0 && start_i < height)) {
-                    std::cout << "Warning! Invalid value of '" << CNS_TAG_STY
-                              << "' tag encountered (or could not convert to integer)" << std::endl;
-                    std::cout << "Value of '" << CNS_TAG_STY << "' tag should be an integer AND >=0 AND < '"
-                              << CNS_TAG_HEIGHT << "' value, which is " << height << std::endl;
-                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_STY
-                              << "' tag will be encountered later..." << std::endl;
+        
+                int sx = agent_data[CNS_TAG_STX];
+                int sy = agent_data[CNS_TAG_STY];
+                int fx = agent_data[CNS_TAG_FINX];
+                int fy = agent_data[CNS_TAG_FINY];
+        
+                if (sx < 0 || sx >= width || fx < 0 || fx >= width ||
+                    sy < 0 || sy >= height || fy < 0 || fy >= height) {
+                    std::cout << "Error! Agent '" << agent_id << "' has coordinates out of bounds." << std::endl;
+                    return false;
                 }
-                else
-                    hasSTY = true;
+                agents_tasks->emplace_back(sy, sx, fy, fx);
             }
-        }
-        else if (value == CNS_TAG_FINX) {
-            if (!hasWidth) {
-                std::cout << "Error! '" << CNS_TAG_FINX << "' tag encountered before '" << CNS_TAG_WIDTH << "' tag."
-                          << std::endl;
-                return false;
-            }
-
-            if (hasFINX) {
-                std::cout << "Warning! Duplicate '" << CNS_TAG_FINX << "' encountered." << std::endl;
-                std::cout << "Only first value of '" << CNS_TAG_FINX << "' =" << goal_j << "will be used." << std::endl;
-            }
-            else {
-                if (!(stream >> goal_j && goal_j >= 0 && goal_j < width)) {
-                    std::cout << "Warning! Invalid value of '" << CNS_TAG_FINX
-                              << "' tag encountered (or could not convert to integer)" << std::endl;
-                    std::cout << "Value of '" << CNS_TAG_FINX << "' tag should be an integer AND >=0 AND < '"
-                              << CNS_TAG_WIDTH << "' value, which is " << width << std::endl;
-                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_FINX
-                              << "' tag will be encountered later..." << std::endl;
-                }
-                else
-                    hasFINX = true;
-            }
-        }
-        else if (value == CNS_TAG_FINY) {
-            if (!hasHeight) {
-                std::cout << "Error! '" << CNS_TAG_FINY << "' tag encountered before '" << CNS_TAG_HEIGHT << "' tag."
-                          << std::endl;
-                return false;
-            }
-
-            if (hasFINY) {
-                std::cout << "Warning! Duplicate '" << CNS_TAG_FINY << "' encountered." << std::endl;
-                std::cout << "Only first value of '" << CNS_TAG_FINY << "' =" << goal_i << "will be used." << std::endl;
-            }
-            else {
-                if (!(stream >> goal_i && goal_i >= 0 && goal_i < height)) {
-                    std::cout << "Warning! Invalid value of '" << CNS_TAG_FINY
-                              << "' tag encountered (or could not convert to integer)" << std::endl;
-                    std::cout << "Value of '" << CNS_TAG_FINY << "' tag should be an integer AND >=0 AND < '"
-                              << CNS_TAG_HEIGHT << "' value, which is " << height << std::endl;
-                    std::cout << "Continue reading JSON and hope correct value of '" << CNS_TAG_FINY
-                              << "' tag will be encountered later..." << std::endl;
-                }
-                else
-                    hasFINY = true;
-            }
+            ////////////////////////////////////////////////////////////////////////////////
+            start_i = (*agents_tasks)[0].start_i;
+            start_j = (*agents_tasks)[0].start_j;
+            goal_i = (*agents_tasks)[0].goal_i;
+            goal_j = (*agents_tasks)[0].goal_j;
+            /////////////////////////////////////////////////////////////////////////////////
         }
         else if (value == CNS_TAG_GRID) {
             hasGrid = true;
@@ -281,8 +217,6 @@ bool Map::getMap(const char *FileName)
         std::cout << "Error! There is no tag 'grid' in json-file!\n";
         return false;
     }
-    if (!(hasFINX && hasFINY && hasSTX && hasSTY))
-        return false;
 
     if (Grid[start_i][start_j] != CN_GC_NOOBS) {
         std::cout << "Error! Start cell is not traversable (cell's value is" << Grid[start_i][start_j] << ")!"

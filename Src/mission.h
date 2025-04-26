@@ -4,6 +4,7 @@
 #include "astar.h"
 #include "map.h"
 #include "config.h"
+#include "pbs.h"
 #include "dynobs.h"
 #include "search.h"
 #include "ilogger.h"
