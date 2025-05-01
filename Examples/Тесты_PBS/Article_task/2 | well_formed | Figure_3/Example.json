@@ -1,0 +1,42 @@
+{
+	"root": {
+    		"map": {
+			"width": 5,
+			"height": 2,
+			"cellsize": 1,
+			"agents": {
+				"id_0": {
+					"startx": 3,
+					"starty": 0,
+					"finishx": 0,
+					"finishy": 0
+				},
+				"id_1": {
+					"startx": 1,
+					"starty": 0,
+					"finishx": 4,
+					"finishy": 0
+				}
+			},
+			"grid": [
+			    "[0, 0, 1, 0, 0]",
+			    "[0, 0, 0, 0, 0]"
+			]
+		},
+		"algorithm": {
+            "searchtype": "pbs",
+            "metrictype": "manhattan",
+            "breakingties": "g-max",
+            "T_max": 200,
+            "seed": 10,
+            "number_of_obstacles": 0,
+            "hweight": 1,
+            "allowdiagonal": false,
+            "cutcorners": false,
+            "allowsqueeze": false
+        },
+		"options": {
+			"loglevel": 1
+		}
+	}
+}

@@ -97,24 +97,11 @@ bool PBS::UpdatePlan(PriorityTreeNode& node, int idx_agent) {
             continue;
         }
 
-
         SearchResult result = search.startSearch();
-        //std::cout << (result.lppath)->size() << std::endl;
-        //std::cout << (result.lppath)->size() << std::endl;
-        // std::cout << current_agent << std::endl;
-        // for (auto [first, second]: *dyn_obs_creator.GetPtrFreeTimestepsTable()) {
-        //     std::cout << "Point " << first / 5 << " " << first % 5 << std::endl;
-        //     for (auto elem: second) {
-        //         std::cout << elem.first << " " << elem.second << std::endl;
-        //     }
-        // }
-        // for (auto i: *(result.lppath)) {
-        //     std::cout << i.j << " " << i.i << std::endl;
-        // }
-
         if (!result.pathfound) {
             return false;
         }
+
         *(result.lppath) = FlattenVector(*(result.lppath));
         node.plan[current_agent] = *(result.lppath);
         node.time[current_agent] = result.pathlength;

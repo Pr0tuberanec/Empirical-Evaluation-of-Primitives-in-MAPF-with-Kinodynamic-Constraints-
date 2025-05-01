@@ -27,9 +27,14 @@ class SIPP : public Search
         void processNode(const TimeNode& curNode);                              
 
         bool isNodeInOpen(int nodeIdx, int start_t);
+        bool isNodeInClose(int nodeIdx, int start_t);
         bool isValidSuccessor(int nodeIdx, int start_t);
 
-        bool checkMoveIntersection(TimeNode curNode, Node newNode, int start_t, int end_t);
+        std::pair<int, int> searchIntrvl(int nodeIdx, std::pair<int, int> intrvl);
+        bool checkMoveIntersection(int curNode_i, int curNode_j, int newNode_i,
+                                   int newNode_j, int start_t, int end_t);
+        std::vector<std::pair<int, int>> projectIntervals(
+            Primitive edge, TimeNode startNode, Map* map);
 
         void getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors);
         void updateSearchResult(Node* curNode, bool found,

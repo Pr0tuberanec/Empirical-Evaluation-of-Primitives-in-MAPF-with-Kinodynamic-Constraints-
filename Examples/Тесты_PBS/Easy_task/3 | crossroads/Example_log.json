@@ -1,0 +1,59 @@
+{
+    "root": {
+        "log": {
+            "mapfilename": "/home/user/pro/path-planning-project-master/Examples/Example.json",
+            "summary": {
+                "numberofsteps": 21,
+                "nodescreated": 0,
+                "length": 21.0,
+                "length_scaled": 21.0,
+                "time": "0.004421"
+            },
+            "path": [
+                "[0,1,0]",
+                "[0,0,0]",
+                "[0,1,0]"
+            ],
+            "lplevel": [
+                "x = 21845, y = 1432847580, time = 21.000000"
+            ],
+            "hplevel": null,
+            "obstaclespath": {
+                "obstacle id: 0": [
+                    "x = 0, y = 0, time = 0.000000",
+                    "x = 0, y = 1, time = 1.000000",
+                    "x = 0, y = 2, time = 2.000000",
+                    "x = 0, y = 2, time = 3.000000",
+                    "x = 0, y = 1, time = 4.000000",
+                    "x = 1, y = 1, time = 5.000000",
+                    "x = 2, y = 1, time = 6.000000",
+                    "x = 2, y = 0, time = 7.000000"
+                ],
+                "obstacle id: 1": [
+                    "x = 2, y = 0, time = 0.000000",
+                    "x = 2, y = 0, time = 1.000000",
+                    "x = 2, y = 1, time = 2.000000",
+                    "x = 2, y = 2, time = 3.000000",
+                    "x = 2, y = 2, time = 4.000000",
+                    "x = 2, y = 2, time = 5.000000",
+                    "x = 2, y = 2, time = 6.000000",
+                    "x = 2, y = 1, time = 7.000000",
+                    "x = 1, y = 1, time = 8.000000",
+                    "x = 0, y = 1, time = 9.000000",
+                    "x = 0, y = 2, time = 10.000000"
+                ],
+                "obstacle id: 2": [
+                    "x = 2, y = 2, time = 0.000000",
+                    "x = 2, y = 1, time = 1.000000",
+                    "x = 1, y = 1, time = 2.000000",
+                    "x = 0, y = 1, time = 3.000000",
+                    "x = 0, y = 0, time = 4.000000"
+                ]
+            },
+            "width": 3,
+            "height": 3,
+            "start": "start_x = 0, start_y = 0",
+            "finish": "finish_x = 2, finish_y = 0"
+        }
+    }
+}

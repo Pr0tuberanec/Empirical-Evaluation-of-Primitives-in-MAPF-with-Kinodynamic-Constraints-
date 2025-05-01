@@ -1,0 +1,40 @@
+{
+    "root": {
+        "map": {
+            "width": 8,
+            "height": 8,
+            "cellsize": 1,
+            "agents": {
+                "id_0": {"startx": 0, "starty": 0, "finishx": 7, "finishy": 7},
+                "id_1": {"startx": 7, "starty": 0, "finishx": 0, "finishy": 7},
+                "id_2": {"startx": 2, "starty": 0, "finishx": 2, "finishy": 7},
+                "id_3": {"startx": 5, "starty": 7, "finishx": 5, "finishy": 0}
+            },
+            "grid": [
+                "[0,1,0,0,0,0,1,0]",
+                "[0,1,0,1,1,0,1,0]",
+                "[0,1,0,0,0,0,1,0]",
+                "[0,0,0,1,1,0,0,0]",
+                "[1,1,0,0,0,0,1,1]",
+                "[0,0,0,1,1,0,0,0]",
+                "[0,1,0,0,0,0,1,0]",
+                "[0,1,0,1,1,0,1,0]"
+            ]
+        },
+        "algorithm": {
+            "searchtype": "pbs",
+            "metrictype": "manhattan",
+            "breakingties": "g-max",
+            "T_max": 2000,
+            "seed": 10,
+            "number_of_obstacles": 0,
+            "hweight": 1,
+            "allowdiagonal": false,
+            "cutcorners": false,
+            "allowsqueeze": false
+        },
+        "options": {
+            "loglevel": 1
+        }
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "root": {
+        "log": {
+            "mapfilename": "/home/user/pro/path-planning-project-master/Examples/Example.json",
+            "summary": {
+                "numberofsteps": 13,
+                "nodescreated": 0,
+                "length": 13.0,
+                "length_scaled": 13.0,
+                "time": "0.001609"
+            },
+            "path": [
+                "[0,0,1,0,0]",
+                "[0,0,0,0,0]"
+            ],
+            "lplevel": [
+                "x = 21845, y = 1432843512, time = 13.000000"
+            ],
+            "hplevel": null,
+            "obstaclespath": {
+                "obstacle id: 0": [
+                    "x = 3, y = 0, time = 0.000000",
+                    "x = 3, y = 1, time = 1.000000",
+                    "x = 2, y = 1, time = 2.000000",
+                    "x = 1, y = 1, time = 3.000000",
+                    "x = 0, y = 1, time = 4.000000",
+                    "x = 0, y = 0, time = 5.000000"
+                ],
+                "obstacle id: 1": [
+                    "x = 1, y = 0, time = 0.000000",
+                    "x = 1, y = 0, time = 1.000000",
+                    "x = 1, y = 0, time = 2.000000",
+                    "x = 1, y = 0, time = 3.000000",
+                    "x = 1, y = 1, time = 4.000000",
+                    "x = 2, y = 1, time = 5.000000",
+                    "x = 3, y = 1, time = 6.000000",
+                    "x = 4, y = 1, time = 7.000000",
+                    "x = 4, y = 0, time = 8.000000"
+                ]
+            },
+            "width": 5,
+            "height": 2,
+            "start": "start_x = 3, start_y = 0",
+            "finish": "finish_x = 0, finish_y = 0"
+        }
+    }
+}

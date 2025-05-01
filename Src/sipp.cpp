@@ -39,15 +39,19 @@ void SIPP::initializeSearch() {
     int end_t = free_timesteps_table->count(start_pos) ?
                 (*free_timesteps_table)[start_pos][0].second : T_max - 1;
 
-    TimeNode startNode(map->start_i, map->start_j, 0,
+    TimeNode startNode(map->start_i, map->start_j, start_t,
                        computeHFromCellToCell(map->start_i, map->start_j, map->goal_i, map->goal_j, *options),
-                       hweight, start_t, end_t, 0);
+                       hweight, start_t, end_t, 0, 0);
 
     open.Add(startNode);
 }
 
 bool SIPP::isNodeInOpen(int nodeIdx, int start_t) {
     return open.GetKey().count(nodeIdx) && open.GetKey().at(nodeIdx).count(start_t);
+}
+
+bool SIPP::isNodeInClose(int nodeIdx, int start_t) {
+    return close.count(nodeIdx) && close.at(nodeIdx).count(start_t);
 }
 
 bool SIPP::isGoalReachable(const TimeNode& curNode) {
@@ -72,10 +76,8 @@ void SIPP::processNode(const TimeNode& curNode) {
         child.parent = &close[curNode.i * map->width + curNode.j][curNode.start_t];
         int childIdx = child.i * map->width + child.j;
 
-        if (isNodeInOpen(childIdx, child.start_t)) {
-            if (open.GetComparator()(open.GetData().at(open.GetKey().at(childIdx).at(child.start_t)), child)) {
-                open.UpdateKey(open.GetData().at(open.GetKey().at(childIdx).at(child.start_t)), child);
-            }
+        if (isNodeInOpen(childIdx, child.start_t) || isNodeInClose(childIdx, child.start_t)) {
+            continue;
         } else {
             open.Add(child);
         }
@@ -128,10 +130,10 @@ bool SIPP::isValidSuccessor(int nodeIdx, int start_t) {
 }
 
 // Плохо продумана поддержка передвижений различной стоимости
-bool SIPP::checkMoveIntersection(TimeNode curNode, Node newNode, int start_t, int end_t) {
+bool SIPP::checkMoveIntersection(int curNode_i, int curNode_j, int newNode_i, int newNode_j, int start_t, int end_t) {
     for(int time = start_t; time < end_t; ++time) {
-        int curNodeIdx = time * map->width * map->height + newNode.i * map->width + newNode.j;
-        int newNodeIdx = (time + 1) * map->width * map->height + curNode.i * map->width + curNode.j;
+        int curNodeIdx = time * map->width * map->height + newNode_i * map->width + newNode_j;
+        int newNodeIdx = (time + 1) * map->width * map->height + curNode_i * map->width + curNode_j;
         if (obstacles_table->count(curNodeIdx) && obstacles_table->count(newNodeIdx)) {
             if ((*obstacles_table)[curNodeIdx] == (*obstacles_table)[newNodeIdx]) {
                 return true;
@@ -141,38 +143,88 @@ bool SIPP::checkMoveIntersection(TimeNode curNode, Node newNode, int start_t, in
     return false;
 }
 
+std::pair<int, int> SIPP::searchIntrvl(int nodeIdx, std::pair<int, int> intrvl) {
+    const std::vector<std::pair<int, int>>& free_intrvls = getFreeTimesteps(nodeIdx);
+    int r_bnd = free_intrvls.size();
+    int l_bnd = -1;
+    while (r_bnd - l_bnd > 1) {
+        int mid = (r_bnd + l_bnd) / 2;
+        if (free_intrvls[mid].first > intrvl.first) {
+            r_bnd = mid;
+        } else {
+            l_bnd = mid;
+        }
+    }
+
+    return free_intrvls[l_bnd];
+}   
+
 void SIPP::getSuccessors(TimeNode curNode, std::vector<TimeNode>& successors) {
     successors.clear();
     std::vector<std::pair<int, int>> side_moves = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}}; //, Point(0, 0)};
-    for (const auto& move : side_moves) {
-        Node neighbour(curNode.i + move.first, curNode.j + move.second, -1, -1, -1);
+    for (auto move : side_moves) {
+        Primitive edge(curNode, move, map);
+        TimeNode neighbour(curNode.i + move.first, curNode.j + move.second, -1, -1, -1, -1, -1, -1, edge.end_vel);
         int neighbourIdx = neighbour.i * map->width + neighbour.j;
 
-        if (!map->CellOnGrid(neighbour.i, neighbour.j) ||
-            !map->CellIsTraversable(neighbour.i, neighbour.j)) {
-            continue;
+        auto intrvls = projectIntervals(edge, curNode, map);
+        if (neighbour.vel == 0) {
+            for(auto& intrvl : intrvls) {
+                auto upper_intrvl = searchIntrvl(neighbourIdx, intrvl);
+                intrvl.second = upper_intrvl.second;
+            }
         }
-        
-        auto free_timesteps = getFreeTimesteps(neighbourIdx);
-        for (const auto& [start_t, end_t] : free_timesteps) {
-            if (!isValidSuccessor(neighbourIdx, start_t)) {
-                continue;
-            }
 
-            int dist = computeCostToNeighbour(curNode.i, curNode.j, neighbour.i, neighbour.j);
-            if (start_t > curNode.end_t + dist || end_t < curNode.t + dist) {
-                continue;
-            }
-            
-            if (checkMoveIntersection(curNode, neighbour, curNode.end_t, start_t)) {
-                continue;
-            }
-
-            int arrival_time = std::max(curNode.t + dist, start_t);
-            TimeNode newNode(neighbour.i, neighbour.j, arrival_time,
-                             computeHFromCellToCell(neighbour.i, neighbour.j, map->goal_i, map->goal_j, *options), 
-                             hweight, start_t, end_t, arrival_time, nullptr);
+        for(auto intrvl : intrvls) {
+            TimeNode newNode(neighbour.i, neighbour.j, intrvl.first,
+                computeHFromCellToCell(neighbour.i, neighbour.j, map->goal_i, map->goal_j, *options), 
+                hweight, intrvl.first, intrvl.second, intrvl.first, neighbour.vel, nullptr);
             successors.emplace_back(newNode);
         }
     }
+}
+
+std::vector<std::pair<int, int>> SIPP::projectIntervals(Primitive edge, TimeNode startNode, Map* map) {
+    std::vector<std::pair<int ,int>> time_intrvls{{startNode.start_t, startNode.end_t}};
+    double t = 0;
+    auto prev_cell = edge.cells[0];
+    for(auto cell : edge.cells) {
+        if (!map->CellOnGrid(cell.i, cell.j) ||
+            !map->CellIsTraversable(cell.i, cell.j)) {
+            return {};
+        }
+
+        std::vector<std::pair<int, int>> new_intrvls;
+        double delta = cell.intrvl.first - t;
+        t = cell.intrvl.first;
+
+        for(std::pair<int, int> ti : time_intrvls) {
+            for(std::pair<int ,int> si : getFreeTimesteps(cell.nodeIdx)) {//(*free_timesteps_table)[cell.nodeIdx]) {
+                double t_earliest = std::max<double>(ti.first + delta, si.first);
+                double t_latest = std::min<double>(ti.second + delta, si.second - (cell.intrvl.second - cell.intrvl.first));
+                if (t_earliest <= t_latest) {
+                    int curNode_i = prev_cell.nodeIdx / map->width;
+                    int curNode_j = prev_cell.nodeIdx % map->width;
+                    int newNode_i = cell.nodeIdx / map->width;
+                    int newNode_j = cell.nodeIdx % map->width;
+                    if (checkMoveIntersection(curNode_i, curNode_j, newNode_i, newNode_j, ti.second, si.first)) {
+                        break;
+                    }
+                    new_intrvls.emplace_back(t_earliest, t_latest);
+                }
+            }
+        }
+        prev_cell = cell;
+        time_intrvls = std::move(new_intrvls);
+        new_intrvls.clear();
+    }
+
+    Cell last_cell = edge.cells.back();
+    double delta = edge.cost - last_cell.intrvl.first;
+    for(auto& ti : time_intrvls) {
+        ti.first += delta;
+        ti.second += delta;
+    }
+
+    return time_intrvls;
 }
