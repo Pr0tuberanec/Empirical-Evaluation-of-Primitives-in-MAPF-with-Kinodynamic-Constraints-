@@ -1,9 +1,0 @@
-break main.cpp:10
-break main.cpp:15
-break main.cpp:16
-break main.cpp:20
-break main.cpp:30
-break main.cpp:31
-catch throw
-
-set exec-wrapper logging enabled

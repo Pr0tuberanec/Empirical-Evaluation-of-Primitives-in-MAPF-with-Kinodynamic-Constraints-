@@ -1,3 +1,0 @@
-/home/user/path-planning-project-master/build/CMakeFiles/Asearch.dir
-/home/user/path-planning-project-master/build/CMakeFiles/edit_cache.dir
-/home/user/path-planning-project-master/build/CMakeFiles/rebuild_cache.dir

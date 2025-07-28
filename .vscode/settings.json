@@ -59,6 +59,22 @@
         "__bit_reference": "cpp",
         "__hash_table": "cpp",
         "__node_handle": "cpp",
-        "__split_buffer": "cpp"
+        "__split_buffer": "cpp",
+        "unordered_set": "cpp",
+        "any": "cpp",
+        "codecvt": "cpp",
+        "forward_list": "cpp",
+        "map": "cpp",
+        "iomanip": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "valarray": "cpp",
+        "queue": "cpp",
+        "__tree": "cpp",
+        "fstream": "cpp",
+        "__locale": "cpp",
+        "set": "cpp"
     }
 }
