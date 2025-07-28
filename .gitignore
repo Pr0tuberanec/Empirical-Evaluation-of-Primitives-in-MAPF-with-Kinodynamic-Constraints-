@@ -1,0 +1,9 @@
+# CI/CD files
+.travis.yml
+.appveyor.yml
+
+# Debugger history
+.gdb_history
+
+# VS Code
+.vscode/
