@@ -30,7 +30,7 @@ void Mission::printSearchResultsToConsole() {
         std::cout << "NOT ";
     std::cout << "found!" << std::endl;
     if (search_results.pathfound) {
-        std::cout << "pathlength=" << search_results.pathlength << std::endl;
+        std::cout << "cost=" << search_results.pathlength / 10 << std::endl;
     }
     std::cout << "time=" << search_results.time << std::endl;
 }

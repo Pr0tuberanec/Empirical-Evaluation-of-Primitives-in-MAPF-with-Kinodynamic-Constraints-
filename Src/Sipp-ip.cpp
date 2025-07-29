@@ -67,7 +67,7 @@ bool SIPPwIP::validateStartNode(const Node& start_node) {
     bool valid = ((t_upper >= t_lower) && (it->second < t_lower) &&
                    map.cellIsTraversable(start_node.i, start_node.j));
     if (!valid) {
-        std::cerr << "Error, the initial state falls in an obstacle!!" << std::endl;
+        // std::cerr << "Error, the initial state falls in an obstacle!!" << std::endl;
     }
     return valid;
 }
