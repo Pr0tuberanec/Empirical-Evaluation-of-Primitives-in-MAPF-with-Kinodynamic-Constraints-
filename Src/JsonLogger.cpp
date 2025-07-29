@@ -33,9 +33,9 @@ void JsonLogger::saveLog() {
     }
 }
 
-void JsonLogger::writeToLogSummary(float length, double time) {
+void JsonLogger::writeToLogSummary(float cost, double time) {
     nlohmann::ordered_json summary;
-    summary = {{CNS_TAG_ATTR_LENGTH, length}, {CNS_TAG_ATTR_TIME, std::to_string(time).c_str()}};
+    summary = {{CNS_TAG_ATTR_COST, cost / 10}, {CNS_TAG_ATTR_TIME, std::to_string(time).c_str()}};
     parsed_json[CNS_TAG_ROOT][CNS_TAG_LOG][CNS_TAG_SUM] = summary;
 }
 

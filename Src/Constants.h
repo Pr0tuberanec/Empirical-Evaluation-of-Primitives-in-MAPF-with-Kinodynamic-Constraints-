@@ -37,7 +37,7 @@
 
 #define CNS_TAG_ATTR_NUMOFSTEPS     "numberofsteps"
 #define CNS_TAG_ATTR_NODESCREATED   "nodescreated"
-#define CNS_TAG_ATTR_LENGTH         "length"
+#define CNS_TAG_ATTR_COST           "cost"
 #define CNS_TAG_ATTR_LENGTH_SCALED  "length_scaled"
 #define CNS_TAG_ATTR_TIME           "time"
 
