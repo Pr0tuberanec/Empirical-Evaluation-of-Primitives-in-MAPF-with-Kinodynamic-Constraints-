@@ -12,7 +12,6 @@ A detailed description of the methods, primitive families, and comparison result
 
 ## 🗂️ Repository Structure
 
-- `Demos/` — animations showcasing different families of motion primitives in use.
 - `Examples/` — input/output JSON examples for running algorithms on custom tasks (not from MovingAI).
 - `Instances/` — datasets with maps and scenarios from the [MovingAI benchmark](https://movingai.com/benchmarks/mapf/index.html) used in our experiments.
 - `Src/` — C++ source files for PBS + SIPP-IP and primitives implementation.
