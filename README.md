@@ -29,7 +29,7 @@ A detailed description of the methods, primitive families, and comparison result
 | Map       | Stores map data |
 | Mission   | Manages end-to-end execution of the algorithm |
 | Parse     | Converts user inputs into a JSON format for algorithm execution |
-| PBS       | Implements the Priority-Based Search algorithm and defines the motion primitive set |
+| PBS       | Implements the Priority-Based Search algorithm and defines the motion primitive set (if you change primitives, remember to change CN_MXV (maximum speed + 1) in constants.h) |
 | SIPP-IP   | Modified Safe Interval Path Planning with Interval Projection (based on [authors' implementaion](https://github.com/PathPlanning/SIPP-IP)) |
 | Task      | Stores the current objective for each agent |
 
