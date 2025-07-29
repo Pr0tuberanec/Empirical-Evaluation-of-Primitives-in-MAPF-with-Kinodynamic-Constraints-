@@ -45,7 +45,8 @@ A detailed description of the methods, primitive families, and comparison result
 
 ### Building the Project
 
-```bash git clone https://github.com/Pr0tuberanec/Empirical-Evaluation-of-Primitives-in-MAPF-with-Kinodynamic-Constraints-.git
+```bash
+git clone https://github.com/Pr0tuberanec/Empirical-Evaluation-of-Primitives-in-MAPF-with-Kinodynamic-Constraints-.git
 cd Empirical-Evaluation-of-Primitives-in-MAPF-with-Kinodynamic-Constraints-
 mkdir build && cd build
 cmake ..
